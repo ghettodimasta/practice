@@ -5,4 +5,4 @@
 
 [**Спецификация**](https://github.com/justtomu/practice/blob/main/specification.png)
 
-[**План разработки**](https://github.com/justtomu/practice/blob/main/development_plan.md)
+[**План разработки**](https://github.com/justtomu/practice/blob/main/development%20plan.md)
