@@ -3,6 +3,8 @@
 **Состав бригады:**
 Павлов Дмитрий, Скворчевский Богдан, Ефимов Максим
 
+**Цель:** Разработать программу с графическим интерфейсом на языке программирования Java для визуализации работы алгоритма Дейкстры.
+
 [**Спецификация**](https://github.com/justtomu/practice/blob/main/specification.png)
 
 [**План разработки**](https://github.com/justtomu/practice/blob/main/development%20plan.md)
