@@ -105,7 +105,7 @@ public class GUI extends JFrame {
         JButton run_algorithm = new JButton("Запустить алгоритм");
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
-        JButton stop_alg = new JButton("Отановить");
+        JButton stop_alg = new JButton("Остановить");
         EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
         JButton bord = new JButton("");
         bord.setBorder(border);
