@@ -102,14 +102,21 @@ public class GUI extends JFrame {
         JToolBar tool_bar = new JToolBar(1);
         JPanel button_panel = new JPanel(new GridLayout(20, 2));
         JButton create_graph = new JButton("Создать граф");
+        JButton add_edge = new JButton("Добавить ребро");
+        JButton add_vertex = new JButton("Добавить ребро");
+        JButton del_edge = new JButton("Удалить ребро");
+        JButton stop_add = new JButton("Завершить создание");
+        JButton del_vertex = new JButton("Удалить ребро");
         JButton save_graph = new JButton("Сохранить граф");
         JButton run_algorithm = new JButton("Запустить алгоритм");
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
         JButton stop_alg = new JButton("Остановить");
-        text_area = new JTextArea("Алгоритм\nне запущен");
+        this.text_area = new JTextArea("Пояснения работы\nалгоритма");
         JButton bord = new JButton("");
         bord.setVisible(false);
+        JButton bord2 = new JButton("");
+        bord2.setVisible(false);
         button_panel.add(create_graph);
         button_panel.add(save_graph);
         button_panel.add(run_algorithm);
@@ -117,12 +124,24 @@ public class GUI extends JFrame {
         button_panel.add(next_step);
         button_panel.add(prev_step);
         button_panel.add(stop_alg);
+        button_panel.add(bord2);
+        button_panel.add(add_edge);
+        button_panel.add(add_vertex);
+        button_panel.add(del_edge);
+        button_panel.add(del_vertex);
+        button_panel.add(stop_add);
         text_area.setEditable(false);
         text_area.setPreferredSize(new Dimension(button_panel.getWidth(), 200));
         tool_bar.setFloatable(false);
+
         next_step.setVisible(false);
         prev_step.setVisible(false);
         stop_alg.setVisible(false);
+        del_edge.setVisible(false);
+        del_vertex.setVisible(false);
+        add_edge.setVisible(false);
+        stop_add.setVisible(false);
+        add_vertex.setVisible(false);
         tool_bar.add(button_panel);
         tool_bar.add(text_area);
 
@@ -130,14 +149,28 @@ public class GUI extends JFrame {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
-            text_area.setText("Пояснение\nк работе\nалгоритма");
+        });
+
+        create_graph.addActionListener(e -> {
+            del_edge.setVisible(true);
+            del_vertex.setVisible(true);
+            add_vertex.setVisible(true);
+            add_edge.setVisible(true);
+            stop_add.setVisible(true);
+        });
+
+        stop_add.addActionListener(e -> {
+            del_edge.setVisible(false);
+            del_vertex.setVisible(false);
+            add_edge.setVisible(false);
+            stop_add.setVisible(false);
+            add_vertex.setVisible(false);
         });
 
         stop_alg.addActionListener(e -> {
             next_step.setVisible(false);
             prev_step.setVisible(false);
             stop_alg.setVisible(false);
-            text_area.setText("Алгоритм\nне запущен");
         });
 
         return tool_bar;
