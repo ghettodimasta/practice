@@ -107,7 +107,7 @@ public class GUI extends JFrame {
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
         JButton stop_alg = new JButton("Остановить");
-        this.text_area = new JTextArea("Пояснения работы\nалгоритма");
+        text_area = new JTextArea("Алгоритм\nне запущен");
         JButton bord = new JButton("");
         bord.setVisible(false);
         button_panel.add(create_graph);
@@ -120,7 +120,6 @@ public class GUI extends JFrame {
         text_area.setEditable(false);
         text_area.setPreferredSize(new Dimension(button_panel.getWidth(), 200));
         tool_bar.setFloatable(false);
-
         next_step.setVisible(false);
         prev_step.setVisible(false);
         stop_alg.setVisible(false);
@@ -131,12 +130,14 @@ public class GUI extends JFrame {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
+            text_area.setText("Пояснение\nк работе\nалгоритма");
         });
 
         stop_alg.addActionListener(e -> {
             next_step.setVisible(false);
             prev_step.setVisible(false);
             stop_alg.setVisible(false);
+            text_area.setText("Алгоритм\nне запущен");
         });
 
         return tool_bar;
