@@ -1,6 +1,7 @@
 package com.company;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
@@ -96,35 +97,31 @@ public class GUI extends JFrame {
 
         return info;
     }
-
     private JToolBar init_tool_bar() {
         JToolBar tool_bar = new JToolBar(1);
+        JPanel button_panel = new JPanel(new GridLayout(20, 2));
         JButton create_graph = new JButton("Создать граф");
         JButton save_graph = new JButton("Сохранить граф");
         JButton run_algorithm = new JButton("Запустить алгоритм");
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
-        JButton stop_alg = new JButton("Отановить");
+        JButton stop_alg = new JButton("Остановить");
+        EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
+        JButton bord = new JButton("");
+        bord.setBorder(border);
+        button_panel.add(create_graph);
+        button_panel.add(save_graph);
+        button_panel.add(run_algorithm);
+        button_panel.add(bord);
+        button_panel.add(next_step);
+        button_panel.add(prev_step);
+        button_panel.add(stop_alg);
         tool_bar.setFloatable(false);
 
         next_step.setVisible(false);
         prev_step.setVisible(false);
         stop_alg.setVisible(false);
-
-        tool_bar.addSeparator(new Dimension(5, 5));
-        tool_bar.add(create_graph);
-        tool_bar.addSeparator(new Dimension(5, 5));
-        tool_bar.add(save_graph);
-        tool_bar.addSeparator(new Dimension(5, 5));
-        tool_bar.add(run_algorithm);
-
-        tool_bar.addSeparator(new Dimension(5, 80));
-        tool_bar.add(next_step);
-        tool_bar.addSeparator(new Dimension(5, 5));
-        tool_bar.add(prev_step);
-        tool_bar.addSeparator(new Dimension(5, 5));
-        tool_bar.add(stop_alg);
-
+        tool_bar.add(button_panel);
 
         run_algorithm.addActionListener(e -> {
             next_step.setVisible(true);
