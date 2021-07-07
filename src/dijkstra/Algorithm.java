@@ -9,11 +9,11 @@ public class Algorithm {
     private Graph graph = new Graph();
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
-    Algorithm() {
+    Algorithm() throws Exception {
         this.run_alg();
     }
 
-    public void run_alg() {
+    public void run_alg() throws Exception {
         read_graph_from_file();
 
         graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
@@ -24,8 +24,8 @@ public class Algorithm {
 
     }
 
-    private void read_graph_from_file() {
-        String data = Read("/Users/justtomu/IdeaProjects/pr1/src/graph.txt").strip();
+    private void read_graph_from_file() throws Exception {
+        String data = Read("./src/graph.txt").strip();
         ArrayList<Character> letters = new ArrayList<Character>();
         int counter = 0;
         while (counter < data.length()) {
@@ -50,7 +50,7 @@ public class Algorithm {
                 }
             }
             if (node1 == null) {
-                return;
+                throw new Exception("[ERROR] Can't read file. Check rules u v weight");
             }
             String name2 = edge[1];
             Node node2 = null;
@@ -62,7 +62,7 @@ public class Algorithm {
             }
 
             if (node2 == null) {
-                return;
+                throw new Exception("[ERROR] Can't read file. Check rules u v weight");
             }
 
             node1.addDestination(node2, Integer.parseInt(edge[2]));
@@ -74,6 +74,7 @@ public class Algorithm {
         }
 
     }
+
 
     public String Read(String filename){
         StringBuilder content = new StringBuilder();
