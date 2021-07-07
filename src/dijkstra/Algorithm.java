@@ -25,7 +25,7 @@ public class Algorithm {
     }
 
     private void read_graph_from_file() throws Exception {
-        String data = Read("./src/graph.txt").strip();
+        String data = Read("./Tests/graph.txt").strip();
         ArrayList<Character> letters = new ArrayList<Character>();
         int counter = 0;
         while (counter < data.length()) {
