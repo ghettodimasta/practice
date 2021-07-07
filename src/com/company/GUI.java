@@ -103,10 +103,10 @@ public class GUI extends JFrame {
         JPanel button_panel = new JPanel(new GridLayout(20, 2));
         JButton create_graph = new JButton("Создать граф");
         JButton add_edge = new JButton("Добавить ребро");
-        JButton add_vertex = new JButton("Добавить ребро");
+        JButton add_vertex = new JButton("Добавить вершину");
         JButton del_edge = new JButton("Удалить ребро");
+        JButton del_vertex = new JButton("Удалить вершину");
         JButton stop_add = new JButton("Завершить создание");
-        JButton del_vertex = new JButton("Удалить ребро");
         JButton save_graph = new JButton("Сохранить граф");
         JButton run_algorithm = new JButton("Запустить алгоритм");
         JButton next_step = new JButton("Следующий шаг");
