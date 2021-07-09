@@ -14,6 +14,7 @@ public class Graph_panel extends JPanel {
     private ArrayList circle;
     private ArrayList line;
     private Ellipse2D current;
+    public boolean mouseListenerIsActive = false;
 
 
 
@@ -75,33 +76,36 @@ public class Graph_panel extends JPanel {
     }
 
 
-
-
     private class MyMouse extends MouseAdapter{
+        public void stopMouseListener(){
+            mouseListenerIsActive = false;
+        }
         public void mousePressed(MouseEvent event )
         {
+//            mouseListenerIsActive = true;
+            if(mouseListenerIsActive) {
 
-            current = find(event.getPoint());
-            if(current == null ) {
-                add(event.getPoint());
-            }
-            else{
+                current = find(event.getPoint());
+                if (current == null) {
+                    add(event.getPoint());
+                } else {
 
-                if(first == null){
-                    first = current;
+                    if (first == null) {
+                        first = current;
+                    } else {
+                        second = current;
+                    }
                 }
-                else{
-                    second = current;
+                if (first != null && second != null) {
+                    System.out.println("fdfdfdf");
+                    Line2D my_line = new Line2D.Double(first.getX() + 10, first.getY() + 10, second.getX() + 10, second.getY() + 10);
+                    line.add(my_line);
+                    first = null;
+                    second = null;
+                    repaint();
                 }
             }
-            if(first != null && second != null ){
-                System.out.println("fdfdfdf");
-                Line2D my_line = new Line2D.Double(first.getX() + 10 ,first.getY() + 10  ,second.getX() + 10 ,second.getY() + 10 );
-                line.add(my_line);
-                first = null;
-                second = null;
-                repaint();
-            }
+
         }
 
         public void mouseClicked(MouseEvent event)

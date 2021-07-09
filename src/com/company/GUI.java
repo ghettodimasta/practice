@@ -5,11 +5,12 @@ import dijkstra.Algorithm;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseListener;
 
 
 public class GUI extends JFrame {
     private JPanel main_panel;
-    private JPanel graph_panel;
+    private Graph_panel graph_panel;
     private JTextArea text_area;
     private int window_width;
     private int window_height;
@@ -49,6 +50,7 @@ public class GUI extends JFrame {
         graph_panel = new Graph_panel();
         graph_panel.setBackground(Color.WHITE);
         graph_panel.setBorder(new LineBorder(new Color(230, 230, 230)));
+        graph_panel.mouseListenerIsActive = false;
         return graph_panel;
     }
 
@@ -163,6 +165,7 @@ public class GUI extends JFrame {
             add_vertex.setVisible(true);
             add_edge.setVisible(true);
             stop_add.setVisible(true);
+            graph_panel.mouseListenerIsActive = true;
         });
 
         stop_add.addActionListener(e -> {
@@ -171,6 +174,7 @@ public class GUI extends JFrame {
             add_edge.setVisible(false);
             stop_add.setVisible(false);
             add_vertex.setVisible(false);
+            graph_panel.mouseListenerIsActive = false;
         });
 
         stop_alg.addActionListener(e -> {
