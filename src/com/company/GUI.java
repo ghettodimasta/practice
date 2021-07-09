@@ -45,7 +45,7 @@ public class GUI extends JFrame {
 
 
     private JPanel init_graph_panel() {
-        graph_panel = new JPanel();
+        graph_panel = new Graph_panel();
         graph_panel.setBackground(Color.WHITE);
         graph_panel.setBorder(new LineBorder(new Color(230, 230, 230)));
         return graph_panel;
