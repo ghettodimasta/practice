@@ -36,11 +36,11 @@ public class Graph_panel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         for( int i = 0; i < circle.size();i++) {
-            g2.setColor(new Color((i * 100 + 20) % 255, (i * 100 + 20) % 255, (i * 100 + 20) % 255));
+            g2.setColor(new Color((100 + 20) % 255, (100 + 20) % 255, (100 + 20) % 255));
             g2.fill((Ellipse2D) circle.get(i));
             g2.drawString(String.valueOf(i), (int) ((Ellipse2D) circle.get(i)).getX(), (int) ((Ellipse2D) circle.get(i)).getY());
         }
-        for(int i = 0;i<line.size();i++){
+        for(int i = 0; i<line.size() ;i++){
             g2.fill((Line2D)line.get(i));
             g2.draw((Line2D)line.get(i));
         }
@@ -133,10 +133,7 @@ public class Graph_panel extends JPanel {
 
         @Override
         public void mouseDragged(MouseEvent event) {
-            if(current != null){
-                current.setFrame(event.getX() -10 , event.getY() - 10,20,20);
-                repaint();
-            }
+
         }
     }
 

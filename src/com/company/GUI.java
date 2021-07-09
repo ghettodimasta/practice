@@ -1,19 +1,20 @@
 package com.company;
 
+import dijkstra.Algorithm;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
 
 
 public class GUI extends JFrame {
     private JPanel main_panel;
     private JPanel graph_panel;
-    private JLabel status_text;
     private JTextArea text_area;
     private int window_width;
     private int window_height;
+    private String filename;
+    private String result;
 
     public GUI() {
         super("Алгоритм Дейкстры");
@@ -37,9 +38,9 @@ public class GUI extends JFrame {
         main_panel = new JPanel();
         main_panel.setLayout(new BoxLayout(main_panel, BoxLayout.X_AXIS));
         main_panel.add(init_graph_panel());
+        main_panel.add(init_text_area());
         add(main_panel);
         add(init_tool_bar(), BorderLayout.WEST);
-        add(init_status_panel(), BorderLayout.SOUTH);
         setJMenuBar(init_menu());
     }
 
@@ -52,17 +53,11 @@ public class GUI extends JFrame {
     }
 
 
-    private JPanel init_status_panel() {
-        JPanel statusPanel = new JPanel();
-        statusPanel.setPreferredSize(new Dimension(getWidth(), 42));
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-        status_text = new JLabel("   ...");
-        status_text.setHorizontalAlignment(SwingConstants.LEFT);
-        statusPanel.add(status_text);
-
-        return statusPanel;
+    private JTextArea init_text_area(){
+        text_area = new JTextArea("Пояснение к работе Алгоритма");
+        text_area.setPreferredSize(new Dimension(50,50));
+        return text_area;
     }
-
 
     private JMenu init_file_menu() {
         JMenu fileMenu = new JMenu("Файл");
@@ -73,6 +68,14 @@ public class GUI extends JFrame {
 
         exit.addActionListener( actionEvent -> {
             System.exit(0);
+        });
+
+        read.addActionListener( actionEvent -> {
+            JFileChooser j = new JFileChooser();
+            j.showOpenDialog(null);
+            filename = j.getSelectedFile().toString();
+            System.out.println(filename);
+
         });
 
         fileMenu.add(read);
@@ -100,39 +103,35 @@ public class GUI extends JFrame {
     }
     private JToolBar init_tool_bar() {
         JToolBar tool_bar = new JToolBar(1);
-        JPanel button_panel = new JPanel(new GridLayout(20, 2));
         JButton create_graph = new JButton("Создать граф");
+        create_graph.setFocusPainted(false);
         JButton add_edge = new JButton("Добавить ребро");
         JButton add_vertex = new JButton("Добавить вершину");
         JButton del_edge = new JButton("Удалить ребро");
         JButton del_vertex = new JButton("Удалить вершину");
         JButton stop_add = new JButton("Завершить создание");
         JButton save_graph = new JButton("Сохранить граф");
-        JButton run_algorithm = new JButton("Запустить алгоритм");
+        JButton run_algorithm = new JButton("Запуск алгоритма");
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
         JButton stop_alg = new JButton("Остановить");
-        this.text_area = new JTextArea("Пояснения работы\nалгоритма");
-        JButton bord = new JButton("");
-        bord.setVisible(false);
-        JButton bord2 = new JButton("");
-        bord2.setVisible(false);
-        button_panel.add(create_graph);
-        button_panel.add(save_graph);
-        button_panel.add(run_algorithm);
-        button_panel.add(bord);
-        button_panel.add(next_step);
-        button_panel.add(prev_step);
-        button_panel.add(stop_alg);
-        button_panel.add(bord2);
-        button_panel.add(add_edge);
-        button_panel.add(add_vertex);
-        button_panel.add(del_edge);
-        button_panel.add(del_vertex);
-        button_panel.add(stop_add);
-        text_area.setEditable(false);
-        text_area.setPreferredSize(new Dimension(button_panel.getWidth(), 200));
+
+        //---------------------------------------------------------
+
         tool_bar.setFloatable(false);
+        tool_bar.add(create_graph);
+        tool_bar.add(save_graph);
+        tool_bar.add(run_algorithm);
+        tool_bar.addSeparator(new Dimension(50, 50));
+        tool_bar.add(next_step);
+        tool_bar.add(prev_step);
+        tool_bar.add(stop_alg);
+        tool_bar.addSeparator(new Dimension(50, 50));
+        tool_bar.add(add_edge);
+        tool_bar.add(add_vertex);
+        tool_bar.add(del_edge);
+        tool_bar.add(del_vertex);
+        tool_bar.add(stop_add);
 
         next_step.setVisible(false);
         prev_step.setVisible(false);
@@ -142,13 +141,20 @@ public class GUI extends JFrame {
         add_edge.setVisible(false);
         stop_add.setVisible(false);
         add_vertex.setVisible(false);
-        tool_bar.add(button_panel);
-        tool_bar.add(text_area);
+//        tool_bar.add(text_panel);
 
         run_algorithm.addActionListener(e -> {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
+            Algorithm alg = new Algorithm();
+            try {
+                String text = alg.run_alg(filename);
+                text_area.setText(text);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
         });
 
         create_graph.addActionListener(e -> {

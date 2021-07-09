@@ -9,23 +9,23 @@ public class Algorithm {
     private Graph graph = new Graph();
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
-    Algorithm() throws Exception {
-        this.run_alg();
-    }
 
-    public void run_alg() throws Exception {
-        read_graph_from_file();
-
+    public String run_alg(String filename) throws Exception {
+        read_graph_from_file(filename);
+        StringBuilder result = new StringBuilder();
         graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
         for (Node node : graph.getNodes()) {
-            System.out.print(node.getName() + ' ');
-            System.out.println(node.getDistance());
+//            System.out.print(node.getName() + ' ');
+//            System.out.println(node.getDistance());
+            result.append(node.getName()).append(' ');
+            result.append(node.getDistance());
+            result.append("\n");
         }
-
+        return result.toString();
     }
 
-    private void read_graph_from_file() throws Exception {
-        String data = Read("./Tests/graph.txt").strip();
+    private void read_graph_from_file(String filename) throws Exception {
+        String data = Read(filename).strip();
         ArrayList<Character> letters = new ArrayList<Character>();
         int counter = 0;
         while (counter < data.length()) {
