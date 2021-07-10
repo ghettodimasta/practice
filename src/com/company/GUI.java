@@ -14,7 +14,7 @@ public class GUI extends JFrame {
     private JTextArea text_area;
     private int window_width;
     private int window_height;
-    private String filename;
+    private String filename = null;
     private String result;
 
     public GUI() {
@@ -76,7 +76,7 @@ public class GUI extends JFrame {
             j.showOpenDialog(null);
             filename = j.getSelectedFile().toString();
             System.out.println(filename);
-
+            graph_panel.clear();
         });
 
         fileMenu.add(read);
@@ -152,11 +152,14 @@ public class GUI extends JFrame {
             stop_alg.setVisible(true);
             Algorithm alg = new Algorithm();
             try {
-                String text = alg.run_alg(filename);
+                String text = alg.run_alg_file(filename);
                 text_area.setText(text);
             } catch (Exception exception) {
                 exception.printStackTrace();
                 text_area.setText("Ошибка в файле");
+                alg.read_graph_from_nodes(graph_panel.vertex);
+                String text = alg.run_alg();
+                text_area.setText(text);
             }
 
         });

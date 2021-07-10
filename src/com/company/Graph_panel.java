@@ -36,6 +36,15 @@ public class Graph_panel extends JPanel {
     public boolean deleteListenerIsActive = false;
     public String default_weight;
 
+    public void clear() {
+        vertex = new ArrayList<Node>();
+        edges = new ArrayList<>();
+        current = null;
+        first = null;
+        second = null;
+        repaint();
+    }
+
 
 
     @Override
