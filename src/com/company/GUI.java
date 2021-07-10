@@ -155,6 +155,7 @@ public class GUI extends JFrame {
                 text_area.setText(text);
             } catch (Exception exception) {
                 exception.printStackTrace();
+                text_area.setText("Ошибка в файле");
             }
 
         });
@@ -181,6 +182,7 @@ public class GUI extends JFrame {
             next_step.setVisible(false);
             prev_step.setVisible(false);
             stop_alg.setVisible(false);
+            text_area.setText("Пояснение к работе алгоритма");
         });
 
         return tool_bar;
