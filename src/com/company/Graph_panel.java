@@ -34,6 +34,7 @@ public class Graph_panel extends JPanel {
     public boolean vertexListenerIsActive = false;
     public boolean edgeListenerIsActive = false;
     public boolean deleteListenerIsActive = false;
+    public String default_weight;
 
 
 
@@ -182,9 +183,8 @@ public class Graph_panel extends JPanel {
 //                    lines.add(my_line);
                     Node node1 = vertex.get(vertex.indexOf(first));
                     Node node2 = vertex.get(vertex.indexOf(second));
-                    edges.add(new Edge(node1, node2, my_line, 0));
-                    node1.addDestination(node2, 0);
-
+                    edges.add(new Edge(node1, node2, my_line, (int) Double.parseDouble(default_weight)));
+                    node1.addDestination(node2, (int) Double.parseDouble(default_weight));
                     first = null;
                     second = null;
                     repaint();

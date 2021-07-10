@@ -5,7 +5,8 @@ import dijkstra.Algorithm;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GUI extends JFrame {
     private JPanel main_panel;
@@ -106,6 +107,7 @@ public class GUI extends JFrame {
         JButton create_graph = new JButton("Создать граф");
         create_graph.setFocusPainted(false);
         JButton add_edge = new JButton("Добавить ребро");
+        JTextArea weight = new JTextArea("Введите вес");
         JButton add_vertex = new JButton("Добавить вершину");
         JButton del_edge = new JButton("Удалить ребро");
         JButton del_vertex = new JButton("Удалить вершину");
@@ -132,6 +134,8 @@ public class GUI extends JFrame {
         tool_bar.add(del_edge);
         tool_bar.add(del_vertex);
         tool_bar.add(stop_add);
+        tool_bar.addSeparator(new Dimension(50, 50));
+        tool_bar.add(weight);
 
         next_step.setVisible(false);
         prev_step.setVisible(false);
@@ -142,7 +146,6 @@ public class GUI extends JFrame {
         stop_add.setVisible(false);
         add_vertex.setVisible(false);
 //        tool_bar.add(text_panel);
-
         run_algorithm.addActionListener(e -> {
             next_step.setVisible(true);
             prev_step.setVisible(true);
@@ -176,12 +179,14 @@ public class GUI extends JFrame {
             graph_panel.vertexListenerIsActive = false;
             graph_panel.deleteListenerIsActive = false;
             graph_panel.edgeListenerIsActive = true;
+            graph_panel.default_weight = weight.getText();
         });
 
         del_edge.addActionListener(e -> {
             graph_panel.vertexListenerIsActive = false;
             graph_panel.deleteListenerIsActive = true;
             graph_panel.edgeListenerIsActive = false;
+
         });
 
         del_vertex.addActionListener(e -> {
