@@ -5,7 +5,6 @@ import dijkstra.Algorithm;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseListener;
 
 
 public class GUI extends JFrame {
@@ -50,7 +49,6 @@ public class GUI extends JFrame {
         graph_panel = new Graph_panel();
         graph_panel.setBackground(Color.WHITE);
         graph_panel.setBorder(new LineBorder(new Color(230, 230, 230)));
-        graph_panel.mouseListenerIsActive = false;
         return graph_panel;
     }
 
@@ -166,7 +164,30 @@ public class GUI extends JFrame {
             add_vertex.setVisible(true);
             add_edge.setVisible(true);
             stop_add.setVisible(true);
-            graph_panel.mouseListenerIsActive = true;
+        });
+
+        add_vertex.addActionListener(e -> {
+            graph_panel.vertexListenerIsActive = true;
+            graph_panel.deleteListenerIsActive = false;
+            graph_panel.edgeListenerIsActive = false;
+        });
+
+        add_edge.addActionListener(e -> {
+            graph_panel.vertexListenerIsActive = false;
+            graph_panel.deleteListenerIsActive = false;
+            graph_panel.edgeListenerIsActive = true;
+        });
+
+        del_edge.addActionListener(e -> {
+            graph_panel.vertexListenerIsActive = false;
+            graph_panel.deleteListenerIsActive = true;
+            graph_panel.edgeListenerIsActive = false;
+        });
+
+        del_vertex.addActionListener(e -> {
+            graph_panel.vertexListenerIsActive = false;
+            graph_panel.deleteListenerIsActive = true;
+            graph_panel.edgeListenerIsActive = false;
         });
 
         stop_add.addActionListener(e -> {
@@ -175,7 +196,7 @@ public class GUI extends JFrame {
             add_edge.setVisible(false);
             stop_add.setVisible(false);
             add_vertex.setVisible(false);
-            graph_panel.mouseListenerIsActive = false;
+            graph_panel.vertexListenerIsActive = false;
         });
 
         stop_alg.addActionListener(e -> {

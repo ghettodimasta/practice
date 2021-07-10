@@ -1,5 +1,6 @@
 package dijkstra;
 
+import java.awt.geom.Ellipse2D;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +8,9 @@ import java.util.Map;
 
 public class Node {
 
+    public Ellipse2D picture;
+    public Double x;
+    public Double y;
     private String name;
 
     private LinkedList<Node> shortestPath = new LinkedList<>();

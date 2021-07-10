@@ -1,20 +1,24 @@
 package com.company;
 
+import dijkstra.Node;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.geom.*;
-import java.awt.event.KeyListener;
 
 
 public class Graph_panel extends JPanel {
-    private Ellipse2D first;
-    private Ellipse2D second;
+    private Node first;
+    private Node second;
     private ArrayList circle;
     private ArrayList line;
-    private Ellipse2D current;
-    public boolean mouseListenerIsActive = false;
+    private ArrayList<Node> vertex;
+    private Node current;
+    public boolean vertexListenerIsActive = false;
+    public boolean edgeListenerIsActive = false;
+    public boolean deleteListenerIsActive = false;
 
 
 
@@ -24,6 +28,7 @@ public class Graph_panel extends JPanel {
     };
     public Graph_panel(){
         setBackground(Color.blue);
+        vertex = new ArrayList<Node>();
         circle = new ArrayList();
         line = new ArrayList();
         current = null;
@@ -36,58 +41,80 @@ public class Graph_panel extends JPanel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for( int i = 0; i < circle.size();i++) {
-            g2.setColor(new Color((100 + 20) % 255, (100 + 20) % 255, (100 + 20) % 255));
-            g2.fill((Ellipse2D) circle.get(i));
-            g2.drawString(String.valueOf(i), (int) ((Ellipse2D) circle.get(i)).getX(), (int) ((Ellipse2D) circle.get(i)).getY());
+        for( int i = 0; i < vertex.size();i++) {
+            Node node = vertex.get(i);
+            g2.setColor(new Color(172, 219, 235));
+            g2.fill(node.picture);
+            g2.drawString(String.valueOf(node.getName()), Math.round(node.x), Math.round(node.y));
         }
-        for(int i = 0; i<line.size() ;i++){
+        for(int i = 0; i < line.size() ;i++){
             g2.fill((Line2D)line.get(i));
             g2.draw((Line2D)line.get(i));
         }
     }
 
-    public void add(Point2D p){
-        current = new Ellipse2D.Double(p.getX() -10 , p.getY() - 10,30,30);
+    public void add_node(Point2D p, String name){
 
-        circle.add(current);
+        var node = new Node(name);
+        node.x = p.getX() - 10;
+        node.y = p.getY() - 10;
+        node.picture = new Ellipse2D.Double(p.getX() -10 , p.getY() - 10,30,30);
+        vertex.add(node);
 
         repaint();
     }
 
 
-    public Ellipse2D find(Point2D p)
-    {
-        for(int i = 0; i < circle.size(); i++)
-        {
-            Ellipse2D e = (Ellipse2D) circle.get(i);
-            if(e.contains(p)) return e;
+    public Node find(Point2D p) {
+        for(int i = 0; i < vertex.size(); i++) {
+            Node node = vertex.get(i);
+            if(node.picture.contains(p)) {
+                return node;
+            }
         }
         return null;
     }
 
+    public String get_new_name() {
+        var alphabet = new ArrayList<String>();
+        String[] alphabet2 = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z".split(", ");
+        for (int i = 0; i < 26; i++) {
+            alphabet.add(alphabet2[i]);
+        }
+        if (vertex.size() == 0) {
+            return "A";
+        }
+        String last_name = vertex.get(vertex.size() - 1).getName();
+        return alphabet.get(alphabet.indexOf(last_name) + 1);
+    }
 
-    public void remove(Ellipse2D e )
-    {
-        if(e == null) return;
-        if(e == current) current = null;
-        circle.remove(e);
+
+    public void remove_node(Node node) {
+        if(node == null) return;
+        vertex.remove(node);
+        current = null;
+        first = null;
+        second = null;
         repaint();
     }
 
 
     private class MyMouse extends MouseAdapter{
         public void stopMouseListener(){
-            mouseListenerIsActive = false;
+            vertexListenerIsActive = false;
         }
         public void mousePressed(MouseEvent event )
         {
-//            mouseListenerIsActive = true;
-            if(mouseListenerIsActive) {
+            if(deleteListenerIsActive) {
+                var point = event.getPoint();
+                current = find(point);
+                remove_node(current);
+            }
+            if(vertexListenerIsActive || edgeListenerIsActive) {
 
                 current = find(event.getPoint());
-                if (current == null) {
-                    add(event.getPoint());
+                if (current == null && vertexListenerIsActive) {
+                    add_node(event.getPoint(), get_new_name());
                 } else {
 
                     if (first == null) {
@@ -96,9 +123,8 @@ public class Graph_panel extends JPanel {
                         second = current;
                     }
                 }
-                if (first != null && second != null) {
-                    System.out.println("fdfdfdf");
-                    Line2D my_line = new Line2D.Double(first.getX() + 10, first.getY() + 10, second.getX() + 10, second.getY() + 10);
+                if (first != null && second != null && edgeListenerIsActive) {
+                    Line2D my_line = new Line2D.Double(first.x + 15, first.y + 15, second.x + 15, second.y + 15);
                     line.add(my_line);
                     first = null;
                     second = null;
@@ -108,26 +134,12 @@ public class Graph_panel extends JPanel {
 
         }
 
-        public void mouseClicked(MouseEvent event)
-        {
-            if(event.getClickCount() >= 2)
-            {
-                current = find(event.getPoint());
-                if (current != null)
-                {
-                    remove(current);
-                }
-            }
-        }
     }
 
-
-
-    private class MyMove implements MouseMotionListener
-    {
+    private class MyMove implements MouseMotionListener {
         @Override
         public void mouseMoved(MouseEvent event) {
-            if(find(event.getPoint()) == null){
+            if(find(event.getPoint()) == null || !edgeListenerIsActive){
                 setCursor(Cursor.getDefaultCursor());
             }
             else {
@@ -140,12 +152,6 @@ public class Graph_panel extends JPanel {
 
         }
     }
-
-
-
-
-
-
 
     public class MyKey extends KeyAdapter {
 
