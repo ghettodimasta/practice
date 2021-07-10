@@ -117,6 +117,7 @@ public class GUI extends JFrame {
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
         JButton stop_alg = new JButton("Остановить");
+        weight.setVisible(false);
 
         //---------------------------------------------------------
 
@@ -170,6 +171,7 @@ public class GUI extends JFrame {
             add_vertex.setVisible(true);
             add_edge.setVisible(true);
             stop_add.setVisible(true);
+            weight.setVisible(true);
         });
 
         add_vertex.addActionListener(e -> {
@@ -205,6 +207,7 @@ public class GUI extends JFrame {
             stop_add.setVisible(false);
             add_vertex.setVisible(false);
             graph_panel.vertexListenerIsActive = false;
+            weight.setVisible(false);
         });
 
         stop_alg.addActionListener(e -> {

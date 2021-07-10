@@ -29,7 +29,7 @@ public class Graph_panel extends JPanel {
     private Node second;
 //    private ArrayList<Line2D> lines;
     private ArrayList<Edge> edges;
-    private ArrayList<Node> vertex;
+    public ArrayList<Node> vertex;
     private Node current;
     public boolean vertexListenerIsActive = false;
     public boolean edgeListenerIsActive = false;
@@ -192,11 +192,13 @@ public class Graph_panel extends JPanel {
 //                    lines.add(my_line);
                     Node node1 = vertex.get(vertex.indexOf(first));
                     Node node2 = vertex.get(vertex.indexOf(second));
-                    edges.add(new Edge(node1, node2, my_line, (int) Double.parseDouble(default_weight)));
-                    node1.addDestination(node2, (int) Double.parseDouble(default_weight));
-                    first = null;
-                    second = null;
-                    repaint();
+                    if (node1 != node2) {
+                        edges.add(new Edge(node1, node2, my_line, (int) Double.parseDouble(default_weight)));
+                        node1.addDestination(node2, (int) Double.parseDouble(default_weight));
+                        first = null;
+                        second = null;
+                        repaint();
+                    }
                 }
             }
 
