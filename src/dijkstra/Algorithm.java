@@ -10,18 +10,28 @@ public class Algorithm {
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
 
-    public String run_alg(String filename) throws Exception {
+    public String run_alg_file(String filename) throws Exception {
         read_graph_from_file(filename);
+
+        return this.run_alg();
+    }
+
+    public String run_alg () {
         StringBuilder result = new StringBuilder();
         graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
         for (Node node : graph.getNodes()) {
-//            System.out.print(node.getName() + ' ');
-//            System.out.println(node.getDistance());
             result.append(node.getName()).append(' ');
             result.append(node.getDistance());
             result.append("\n");
         }
         return result.toString();
+    }
+
+    public void read_graph_from_nodes(ArrayList<Node> nodes_list) {
+        this.nodes = nodes_list;
+        for (Node node : nodes_list) {
+            this.graph.addNode(node);
+        }
     }
 
     private void read_graph_from_file(String filename) throws Exception {

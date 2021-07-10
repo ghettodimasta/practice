@@ -29,11 +29,20 @@ public class Graph_panel extends JPanel {
     private Node second;
 //    private ArrayList<Line2D> lines;
     private ArrayList<Edge> edges;
-    private ArrayList<Node> vertex;
+    public ArrayList<Node> vertex;
     private Node current;
     public boolean vertexListenerIsActive = false;
     public boolean edgeListenerIsActive = false;
     public boolean deleteListenerIsActive = false;
+
+    public void clear() {
+        vertex = new ArrayList<Node>();
+        edges = new ArrayList<>();
+        current = null;
+        first = null;
+        second = null;
+        repaint();
+    }
 
 
 
@@ -44,7 +53,6 @@ public class Graph_panel extends JPanel {
     public Graph_panel(){
         setBackground(Color.blue);
         vertex = new ArrayList<Node>();
-//        lines = new ArrayList();
         edges = new ArrayList<>();
         current = null;
         addMouseListener(new MyMouse());
@@ -182,8 +190,8 @@ public class Graph_panel extends JPanel {
 //                    lines.add(my_line);
                     Node node1 = vertex.get(vertex.indexOf(first));
                     Node node2 = vertex.get(vertex.indexOf(second));
-                    edges.add(new Edge(node1, node2, my_line, 0));
-                    node1.addDestination(node2, 0);
+                    edges.add(new Edge(node1, node2, my_line, 1));
+                    node1.addDestination(node2, 1);
 
                     first = null;
                     second = null;
