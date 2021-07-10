@@ -40,7 +40,7 @@ public class Algorithm {
             nodes.add(new Node(letter.toString()));
         }
 
-        for (String line : data.split("\n")) {
+        for (String line : data.split("[\\r\\n]+")) {
             String[] edge = line.split(" ");
             String name1 = edge[0];
             Node node1 = null;
