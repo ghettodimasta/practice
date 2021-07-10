@@ -9,11 +9,26 @@ import java.util.ArrayList;
 import java.awt.geom.*;
 
 
+class Edge {
+    public Line2D picture;
+    public Node node1;
+    public Node node2;
+    public Integer weight;
+
+    Edge (Node node1, Node node2, Line2D line, Integer weight) {
+        this.picture = line;
+        this.node1 = node1;
+        this.node2 = node2;
+        this.weight = weight;
+    }
+}
+
+
 public class Graph_panel extends JPanel {
     private Node first;
     private Node second;
-    private ArrayList circle;
-    private ArrayList line;
+//    private ArrayList<Line2D> lines;
+    private ArrayList<Edge> edges;
     private ArrayList<Node> vertex;
     private Node current;
     public boolean vertexListenerIsActive = false;
@@ -29,8 +44,8 @@ public class Graph_panel extends JPanel {
     public Graph_panel(){
         setBackground(Color.blue);
         vertex = new ArrayList<Node>();
-        circle = new ArrayList();
-        line = new ArrayList();
+//        lines = new ArrayList();
+        edges = new ArrayList<>();
         current = null;
         addMouseListener(new MyMouse());
         addMouseMotionListener(new MyMove());
@@ -41,15 +56,23 @@ public class Graph_panel extends JPanel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for( int i = 0; i < vertex.size();i++) {
+        for (int i = 0; i < edges.size(); i++){
+            Edge edge = edges.get(i);
+            g2.setColor(Color.BLACK);
+            g2.setStroke(new BasicStroke(4));
+            g2.fill(edge.picture);
+            g2.draw(edge.picture);
+            g2.setColor(Color.RED);
+            g2.drawString(edge.weight.toString(), (int) (edge.node1.x + edge.node2.x)/2,
+                    (int) (edge.node1.y + edge.node2.y)/2);
+        }
+
+        for (int i = 0; i < vertex.size(); i++) {
             Node node = vertex.get(i);
             g2.setColor(new Color(172, 219, 235));
             g2.fill(node.picture);
+            g2.setColor(new Color(1, 1, 1));
             g2.drawString(String.valueOf(node.getName()), Math.round(node.x), Math.round(node.y));
-        }
-        for(int i = 0; i < line.size() ;i++){
-            g2.fill((Line2D)line.get(i));
-            g2.draw((Line2D)line.get(i));
         }
     }
 
@@ -72,6 +95,25 @@ public class Graph_panel extends JPanel {
                 return node;
             }
         }
+        return null;
+    }
+
+    public Edge find_line(Point2D p) {
+        for(int i = 0; i < edges.size(); i++) {
+            Edge edge = edges.get(i);
+            Line2D line = edge.picture;
+            System.out.println("not found");
+            double k = (line.getY2() - line.getY1())/(line.getX2() - line.getX1());
+            double b = line.getY1() - line.getX1() * k;
+            double error_amount = 3;
+            System.out.println(p.getX());
+            System.out.println(p.getY());
+            if ((p.getY() - (p.getX()*k + b) < error_amount) && ((p.getX()*k + b - p.getY()) < error_amount)) {
+                System.out.println("found");
+                return edge;
+            }
+        }
+
         return null;
     }
 
@@ -98,6 +140,16 @@ public class Graph_panel extends JPanel {
         repaint();
     }
 
+    public void remove_line(Edge edge) {
+        if(edge == null) return;
+        edges.remove(edge);
+
+        current = null;
+        first = null;
+        second = null;
+        repaint();
+    }
+
 
     private class MyMouse extends MouseAdapter{
         public void stopMouseListener(){
@@ -109,6 +161,8 @@ public class Graph_panel extends JPanel {
                 var point = event.getPoint();
                 current = find(point);
                 remove_node(current);
+                var line = find_line(point);
+                remove_line(line);
             }
             if(vertexListenerIsActive || edgeListenerIsActive) {
 
@@ -125,7 +179,12 @@ public class Graph_panel extends JPanel {
                 }
                 if (first != null && second != null && edgeListenerIsActive) {
                     Line2D my_line = new Line2D.Double(first.x + 15, first.y + 15, second.x + 15, second.y + 15);
-                    line.add(my_line);
+//                    lines.add(my_line);
+                    Node node1 = vertex.get(vertex.indexOf(first));
+                    Node node2 = vertex.get(vertex.indexOf(second));
+                    edges.add(new Edge(node1, node2, my_line, 0));
+                    node1.addDestination(node2, 0);
+
                     first = null;
                     second = null;
                     repaint();
