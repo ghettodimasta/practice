@@ -7,22 +7,26 @@ import java.util.ArrayList;
 
 public class Algorithm {
 
-    private Graph graph = new Graph();
+    public Graph graph = new Graph();
     public ArrayList<Node> nodes = new ArrayList<Node>();
 
 
-    public String run_alg_file(String filename) throws Exception {
-        read_graph_from_file(filename);
+//    public String run_alg_file(String filename) throws Exception {
+//        read_graph_from_file(filename);
+//
+//        return this.run_alg();
+//    }
 
-        return this.run_alg();
-    }
-
-    public String run_alg () {
+    public String run_alg (Node start) {
         StringBuilder result = new StringBuilder();
 //        graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
 
-        Node start = get_starte();
-        if(start == null){ System.out.println("The error of start"); return null; }
+
+        System.out.println(start);
+        if(start == null) {
+            System.out.println("The error of start");
+            return null;
+        }
         Graph new_graph = Dijkstra.calculateShortestPathFromSource(this.graph, start);
 
         graph = null;
@@ -44,20 +48,6 @@ public class Algorithm {
         }
         return result.toString();
     }
-    private Node get_starte(){
-        int optionPane = JOptionPane.QUESTION_MESSAGE;
-            String answer = JOptionPane.showInputDialog(
-                    null, "Set the start",
-                    "The setting of start ",
-                    optionPane);
-            for(Node node : nodes){
-                if(node.getName().equals(answer)){
-                    return node;
-                }
-            }
-
-        return null;
-    }
 
     public void read_graph_from_nodes(ArrayList<Node> nodes_list) {
         this.graph = new Graph();
@@ -67,7 +57,7 @@ public class Algorithm {
         }
     }
 
-    private void read_graph_from_file(String filename) throws Exception {
+    public void read_graph_from_file(String filename) throws Exception {
         String data = Read(filename).strip();
         ArrayList<Character> letters = new ArrayList<Character>();
         int counter = 0;
@@ -130,5 +120,12 @@ public class Algorithm {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public void clear() {
+        this.graph = null;
+        this.nodes = null;
+        this.graph = new Graph();
+        this.nodes = new ArrayList<Node>();
     }
 }

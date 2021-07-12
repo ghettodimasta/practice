@@ -204,7 +204,8 @@ public class Graph_panel extends JPanel {
 
 
     private class MyMouse extends MouseAdapter {
-        public void stopMouseListener() { addVertexListenerIsActive = false;
+        public void stopMouseListener() {
+            addVertexListenerIsActive = false;
         }
 
 
@@ -257,7 +258,6 @@ public class Graph_panel extends JPanel {
             }
 
             if (addEdgeListenerIsActive) {
-                System.out.println("Good");
                 if (first == null) {
                     first = current;
                 } else {
@@ -266,13 +266,15 @@ public class Graph_panel extends JPanel {
                 if (first != null && second != null) {
                     Line2D my_line = new Line2D.Double(first.x + 15, first.y + 15, second.x + 15, second.y + 15);
                     //lines.add(my_line);
+
                     Node node1 = vertex.get(vertex.indexOf(first));
                     Node node2 = vertex.get(vertex.indexOf(second));
                     if (node1 != node2) {
                         System.out.println("add_node");
                         int weight  = Integer.parseInt(get_weight());
-                        edges.add(new Edge(node1, node2, my_line,weight));
+                        edges.add(new Edge(node1, node2, my_line, weight));
                         node1.addDestination(node2, weight);
+                        node2.addDestination(node1, weight);
                         first = null;
                         second = null;
                         repaint();

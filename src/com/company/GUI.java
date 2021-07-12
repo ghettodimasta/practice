@@ -1,12 +1,15 @@
 package com.company;
 
 import dijkstra.Algorithm;
+import dijkstra.Node;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class GUI extends JFrame {
     private JPanel main_panel;
@@ -79,7 +82,7 @@ public class GUI extends JFrame {
             System.out.println(filename);
             graph_panel.clear();
             try {
-                alg.run_alg_file(filename);
+                alg.read_graph_from_file(filename);
                 graph_panel.set_nodes(alg.nodes);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -159,8 +162,23 @@ public class GUI extends JFrame {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
+
+            ArrayList<Node> save_nodes = new ArrayList<>();
+
+            for (Node alg_node : alg.nodes) {
+                save_nodes.add(alg_node);
+            }
+
+            alg.clear();
+
+            for (Node save_node : save_nodes) {
+                save_node.clear();
+                alg.graph.addNode(save_node);
+            }
+
             alg.read_graph_from_nodes(graph_panel.vertex);
-            String text = alg.run_alg();
+            Node start = get_starte();
+            String text = alg.run_alg(start);
             text_area.setText(text);
         });
 
@@ -219,6 +237,21 @@ public class GUI extends JFrame {
         graph_panel.deleteEdgeListenerIsActive = false;
         graph_panel.addVertexListenerIsActive = false;
         graph_panel.addEdgeListenerIsActive = false;
+    }
+
+    private Node get_starte(){
+        int optionPane = JOptionPane.QUESTION_MESSAGE;
+        String answer = JOptionPane.showInputDialog(
+                null, "Set the start",
+                "The setting of start",
+                optionPane);
+        for(Node node : alg.nodes){
+            if(node.getName().equals(answer.strip().toUpperCase(Locale.ROOT))){
+                return node;
+            }
+        }
+
+        return null;
     }
 
 }

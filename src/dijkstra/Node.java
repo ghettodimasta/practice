@@ -1,5 +1,6 @@
 package dijkstra;
 
+import javax.security.auth.login.AccountLockedException;
 import java.awt.geom.Ellipse2D;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,6 +20,12 @@ public class Node {
 
     private Map<Node, Integer> adjacentNodes = new HashMap<>();
 
+    public void clear () {
+        this.shortestPath = null;
+        this.distance = null;
+        this.shortestPath = new LinkedList<Node>();
+        this.distance = Integer.MAX_VALUE;
+    }
     public Node(String name) {
         this.name = name;
     }
