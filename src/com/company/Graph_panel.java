@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.geom.*;
-
+import java.util.Iterator;
 
 class Edge {
     public Line2D picture;
@@ -27,14 +27,15 @@ class Edge {
 public class Graph_panel extends JPanel {
     private Node first;
     private Node second;
-//    private ArrayList<Line2D> lines;
+    //    private ArrayList<Line2D> lines;
     private ArrayList<Edge> edges;
     public ArrayList<Node> vertex;
     private Node current;
-    public boolean vertexListenerIsActive = false;
-    public boolean edgeListenerIsActive = false;
-    public boolean deleteListenerIsActive = false;
-    public String default_weight;
+    public boolean addVertexListenerIsActive = false;
+    public boolean addEdgeListenerIsActive = false;
+    public boolean deleteEdgeListenerIsActive = false;
+    public boolean deleteVertexListenerIsActive = false;
+
 
     public void clear() {
         vertex = new ArrayList<Node>();
@@ -46,12 +47,14 @@ public class Graph_panel extends JPanel {
     }
 
 
-
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension( getParent().getWidth()/2, getParent().getHeight());
-    };
-    public Graph_panel(){
+        return new Dimension(getParent().getWidth() / 2, getParent().getHeight());
+    }
+
+    ;
+
+    public Graph_panel() {
         setBackground(Color.blue);
         vertex = new ArrayList<Node>();
 //        lines = new ArrayList();
@@ -63,18 +66,18 @@ public class Graph_panel extends JPanel {
         second = null;
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for (int i = 0; i < edges.size(); i++){
+        for (int i = 0; i < edges.size(); i++) {
             Edge edge = edges.get(i);
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(4));
             g2.fill(edge.picture);
             g2.draw(edge.picture);
             g2.setColor(Color.RED);
-            g2.drawString(edge.weight.toString(), (int) (edge.node1.x + edge.node2.x)/2,
-                    (int) (edge.node1.y + edge.node2.y)/2);
+            g2.drawString(edge.weight.toString(), (int) (edge.node1.x + edge.node2.x) / 2,
+                    (int) (edge.node1.y + edge.node2.y) / 2);
         }
 
         for (int i = 0; i < vertex.size(); i++) {
@@ -86,22 +89,22 @@ public class Graph_panel extends JPanel {
         }
     }
 
-    public void add_node(Point2D p, String name){
+    public void add_node(Point2D p, String name) {
 
         var node = new Node(name);
         node.x = p.getX() - 10;
         node.y = p.getY() - 10;
-        node.picture = new Ellipse2D.Double(p.getX() -10 , p.getY() - 10,30,30);
+        node.picture = new Ellipse2D.Double(p.getX() - 10, p.getY() - 10, 30, 30);
         vertex.add(node);
 
         repaint();
     }
 
 
-    public Node find(Point2D p) {
-        for(int i = 0; i < vertex.size(); i++) {
+    public Node find_circle(Point2D p) {
+        for (int i = 0; i < vertex.size(); i++) {
             Node node = vertex.get(i);
-            if(node.picture.contains(p)) {
+            if (node.picture.contains(p)) {
                 return node;
             }
         }
@@ -109,16 +112,16 @@ public class Graph_panel extends JPanel {
     }
 
     public Edge find_line(Point2D p) {
-        for(int i = 0; i < edges.size(); i++) {
+        for (int i = 0; i < edges.size(); i++) {
             Edge edge = edges.get(i);
             Line2D line = edge.picture;
             System.out.println("not found");
-            double k = (line.getY2() - line.getY1())/(line.getX2() - line.getX1());
+            double k = (line.getY2() - line.getY1()) / (line.getX2() - line.getX1());
             double b = line.getY1() - line.getX1() * k;
             double error_amount = 3;
             System.out.println(p.getX());
             System.out.println(p.getY());
-            if ((p.getY() - (p.getX()*k + b) < error_amount) && ((p.getX()*k + b - p.getY()) < error_amount)) {
+            if ((p.getY() - (p.getX() * k + b) < error_amount) && ((p.getX() * k + b - p.getY()) < error_amount)) {
                 System.out.println("found");
                 return edge;
             }
@@ -142,7 +145,7 @@ public class Graph_panel extends JPanel {
 
 
     public void remove_node(Node node) {
-        if(node == null) return;
+        if (node == null) return;
         vertex.remove(node);
         current = null;
         first = null;
@@ -151,7 +154,7 @@ public class Graph_panel extends JPanel {
     }
 
     public void remove_line(Edge edge) {
-        if(edge == null) return;
+        if (edge == null) return;
         edges.remove(edge);
 
         current = null;
@@ -161,12 +164,13 @@ public class Graph_panel extends JPanel {
     }
 
 
-    private class MyMouse extends MouseAdapter{
-        public void stopMouseListener(){
-            vertexListenerIsActive = false;
+    private class MyMouse extends MouseAdapter {
+        public void stopMouseListener() { addVertexListenerIsActive = false;
         }
-        public void mousePressed(MouseEvent event )
-        {
+
+
+        public void mousePressed(MouseEvent event) {
+            /*
             if(deleteListenerIsActive) {
                 var point = event.getPoint();
                 current = find(point);
@@ -201,18 +205,114 @@ public class Graph_panel extends JPanel {
                     }
                 }
             }
-
         }
+
+       */
+            current = find_circle(event.getPoint());            //for all if
+
+            if (addVertexListenerIsActive) {
+                if (current == null) {
+                    add_node(event.getPoint(), get_new_name());
+
+                }
+            }
+
+            if (addEdgeListenerIsActive) {
+                System.out.println("Good");
+                if (first == null) {
+                    first = current;
+                } else {
+                    second = current;
+                }
+                if (first != null && second != null) {
+                    Line2D my_line = new Line2D.Double(first.x + 15, first.y + 15, second.x + 15, second.y + 15);
+                    //lines.add(my_line);
+                    Node node1 = vertex.get(vertex.indexOf(first));
+                    Node node2 = vertex.get(vertex.indexOf(second));
+                    if (node1 != node2) {
+                        System.out.println("add_node");
+                        int weight  = Integer.parseInt(get_weight());
+                        edges.add(new Edge(node1, node2, my_line,weight));
+                        node1.addDestination(node2, weight);
+                        first = null;
+                        second = null;
+                        repaint();
+                    }
+                }
+            }
+
+            if(deleteVertexListenerIsActive){
+                System.out.println("tUT");
+                DeliteVertex();
+
+            }
+
+            if(deleteEdgeListenerIsActive){
+                Edge auxiliary = find_line(event.getPoint());
+                remove_line(auxiliary);
+
+            }
+        }
+
+
+        private void DeliteVertex(){
+            //if use a usually circle, the elements will be scipped
+            int fist_size = edges.size();
+            for(int i =0;i< fist_size;i++) {
+                for (Edge edge : edges) {
+                    if (edge.node1 == current || edge.node2 == current) {
+                        edges.remove(edge);
+                        break;
+                    }
+                }
+            }
+            //I dont understand how i can do this normaly
+            vertex.remove(current);
+            current = null;
+            repaint();
+        }
+
+
+        private String get_weight(){
+            Integer weight = 0;
+            String answer = "0";
+            String message = "Input the weight";
+            int optionPane = JOptionPane.QUESTION_MESSAGE;
+            for( int isNumber = 0; isNumber < 1;  ) {
+                answer = JOptionPane.showInputDialog(
+                        null, message,
+                        "THe weight of edge",
+                        optionPane);
+
+                try {
+                    weight = Integer.parseInt(answer);
+                    if( weight != 0 ) {
+                        isNumber = 1;
+                    }else {
+                        message = "The weight must be more zero";
+                        optionPane = JOptionPane.WARNING_MESSAGE;
+                    }
+                }
+                catch (NumberFormatException err)
+                {
+                    message = "The weight must be integer";
+                    optionPane = JOptionPane.ERROR_MESSAGE;
+                    continue;
+                }
+            }
+            return answer;
+        }
+
+
 
     }
 
     private class MyMove implements MouseMotionListener {
         @Override
         public void mouseMoved(MouseEvent event) {
-            if(find(event.getPoint()) == null || !edgeListenerIsActive){
+            if (find_circle(event.getPoint()) == null || !addEdgeListenerIsActive) {
                 setCursor(Cursor.getDefaultCursor());
-            }
-            else {
+            } else {
                 setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
             }
         }
@@ -228,5 +328,6 @@ public class Graph_panel extends JPanel {
     }
 
 
-
 }
+
+

@@ -175,29 +175,24 @@ public class GUI extends JFrame {
         });
 
         add_vertex.addActionListener(e -> {
-            graph_panel.vertexListenerIsActive = true;
-            graph_panel.deleteListenerIsActive = false;
-            graph_panel.edgeListenerIsActive = false;
+            make_False_Default();
+            graph_panel.addVertexListenerIsActive = true;
         });
 
         add_edge.addActionListener(e -> {
-            graph_panel.vertexListenerIsActive = false;
-            graph_panel.deleteListenerIsActive = false;
-            graph_panel.edgeListenerIsActive = true;
-            graph_panel.default_weight = weight.getText();
+            make_False_Default();
+            graph_panel.addEdgeListenerIsActive = true;
         });
 
         del_edge.addActionListener(e -> {
-            graph_panel.vertexListenerIsActive = false;
-            graph_panel.deleteListenerIsActive = true;
-            graph_panel.edgeListenerIsActive = false;
+            make_False_Default();
+            graph_panel.deleteEdgeListenerIsActive = true;
 
         });
 
         del_vertex.addActionListener(e -> {
-            graph_panel.vertexListenerIsActive = false;
-            graph_panel.deleteListenerIsActive = true;
-            graph_panel.edgeListenerIsActive = false;
+            make_False_Default();
+            graph_panel.deleteVertexListenerIsActive = true;
         });
 
         stop_add.addActionListener(e -> {
@@ -206,8 +201,8 @@ public class GUI extends JFrame {
             add_edge.setVisible(false);
             stop_add.setVisible(false);
             add_vertex.setVisible(false);
-            graph_panel.vertexListenerIsActive = false;
             weight.setVisible(false);
+            make_False_Default();
         });
 
         stop_alg.addActionListener(e -> {
@@ -219,4 +214,11 @@ public class GUI extends JFrame {
 
         return tool_bar;
     }
+    private void  make_False_Default(){
+        graph_panel.deleteVertexListenerIsActive = false;
+        graph_panel.deleteEdgeListenerIsActive = false;
+        graph_panel.addVertexListenerIsActive = false;
+        graph_panel.addEdgeListenerIsActive = false;
+    }
+
 }
