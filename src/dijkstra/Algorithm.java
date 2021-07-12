@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Algorithm {
 
     private Graph graph = new Graph();
-    private ArrayList<Node> nodes = new ArrayList<Node>();
+    public ArrayList<Node> nodes = new ArrayList<Node>();
 
 
     public String run_alg_file(String filename) throws Exception {
@@ -28,6 +28,7 @@ public class Algorithm {
     }
 
     public void read_graph_from_nodes(ArrayList<Node> nodes_list) {
+        this.graph = new Graph();
         this.nodes = nodes_list;
         for (Node node : nodes_list) {
             this.graph.addNode(node);

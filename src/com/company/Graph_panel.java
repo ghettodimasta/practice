@@ -111,6 +111,45 @@ public class Graph_panel extends JPanel {
         return null;
     }
 
+    public void set_nodes(ArrayList<Node> nodes) {
+        Double start_x = 30.0;
+        Double start_y = 300.0;
+        Double conter = 50.0;
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
+            node.x = start_x + conter*2;
+
+            if (i % 2 == 0) {
+                node.y = start_y + conter;
+            }
+            else {
+                node.y = start_y - conter;
+            }
+            if (conter >= 200.0) {
+                start_y += 80;
+                conter = 80.0;
+            }
+            conter += 50.0;
+            node.picture = new Ellipse2D.Double(node.x, node.y,30,30);
+            this.vertex.add(node);
+
+        }
+        for (int i = 0; i < nodes.size(); i++) {
+            Node node = nodes.get(i);
+            var connections = node.getAdjacentNodes();
+            for (int j = 0; j < nodes.size(); j++) {
+                var weight = connections.get(nodes.get(j));
+                if (weight != null) {
+                    Line2D my_line = new Line2D.Double(node.x + 15, node.y + 15, nodes.get(j).x + 15, nodes.get(j).y + 15);
+                    this.edges.add(new Edge(node, nodes.get(j), my_line, weight));
+                }
+            }
+        }
+
+
+        System.out.println(this.vertex.toString());
+    }
+
     public Edge find_line(Point2D p) {
         for (int i = 0; i < edges.size(); i++) {
             Edge edge = edges.get(i);

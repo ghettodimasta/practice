@@ -16,6 +16,7 @@ public class GUI extends JFrame {
     private int window_height;
     private String filename = null;
     private String result;
+    private Algorithm alg = new Algorithm();
 
     public GUI() {
         super("Алгоритм Дейкстры");
@@ -77,6 +78,13 @@ public class GUI extends JFrame {
             filename = j.getSelectedFile().toString();
             System.out.println(filename);
             graph_panel.clear();
+            try {
+                alg.run_alg_file(filename);
+                graph_panel.set_nodes(alg.nodes);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         });
 
         fileMenu.add(read);
@@ -146,22 +154,14 @@ public class GUI extends JFrame {
         add_edge.setVisible(false);
         stop_add.setVisible(false);
         add_vertex.setVisible(false);
-//        tool_bar.add(text_panel);
+
         run_algorithm.addActionListener(e -> {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
-            Algorithm alg = new Algorithm();
-            try {
-                String text = alg.run_alg_file(filename);
-                text_area.setText(text);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                text_area.setText("Ошибка в файле");
-                alg.read_graph_from_nodes(graph_panel.vertex);
-                String text = alg.run_alg();
-                text_area.setText(text);
-            }
+            alg.read_graph_from_nodes(graph_panel.vertex);
+            String text = alg.run_alg();
+            text_area.setText(text);
 
         });
 
