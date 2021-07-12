@@ -18,10 +18,23 @@ public class Algorithm {
 
     public String run_alg () {
         StringBuilder result = new StringBuilder();
-        graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
+//        graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
+        Graph new_graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
+        graph = null;
+        graph = new_graph;
         for (Node node : graph.getNodes()) {
             result.append(node.getName()).append(' ');
             result.append(node.getDistance());
+            var dist = node.getShortestPath();
+            if (dist.size() > 0) {
+                result.append(": ");
+            }
+            for (int i = 0; i < dist.size(); i++) {
+                result.append(dist.get(i).getName());
+                if (i != dist.size() - 1) {
+                    result.append("->");
+                }
+            }
             result.append("\n");
         }
         return result.toString();

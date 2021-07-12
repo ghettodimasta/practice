@@ -115,7 +115,7 @@ public class GUI extends JFrame {
         JButton create_graph = new JButton("Создать граф");
         create_graph.setFocusPainted(false);
         JButton add_edge = new JButton("Добавить ребро");
-        JTextArea weight = new JTextArea("Введите вес");
+//        JTextArea weight = new JTextArea("Введите вес");
         JButton add_vertex = new JButton("Добавить вершину");
         JButton del_edge = new JButton("Удалить ребро");
         JButton del_vertex = new JButton("Удалить вершину");
@@ -125,7 +125,7 @@ public class GUI extends JFrame {
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
         JButton stop_alg = new JButton("Остановить");
-        weight.setVisible(false);
+//        weight.setVisible(false);
 
         //---------------------------------------------------------
 
@@ -144,7 +144,7 @@ public class GUI extends JFrame {
         tool_bar.add(del_vertex);
         tool_bar.add(stop_add);
         tool_bar.addSeparator(new Dimension(50, 50));
-        tool_bar.add(weight);
+//        tool_bar.add(weight);
 
         next_step.setVisible(false);
         prev_step.setVisible(false);
@@ -162,7 +162,6 @@ public class GUI extends JFrame {
             alg.read_graph_from_nodes(graph_panel.vertex);
             String text = alg.run_alg();
             text_area.setText(text);
-
         });
 
         create_graph.addActionListener(e -> {
@@ -171,7 +170,8 @@ public class GUI extends JFrame {
             add_vertex.setVisible(true);
             add_edge.setVisible(true);
             stop_add.setVisible(true);
-            weight.setVisible(true);
+//            weight.setVisible(true);
+
         });
 
         add_vertex.addActionListener(e -> {
@@ -201,7 +201,7 @@ public class GUI extends JFrame {
             add_edge.setVisible(false);
             stop_add.setVisible(false);
             add_vertex.setVisible(false);
-            weight.setVisible(false);
+//            weight.setVisible(false);
             make_False_Default();
         });
 
