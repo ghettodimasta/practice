@@ -1,5 +1,6 @@
 package dijkstra;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -19,7 +20,11 @@ public class Algorithm {
     public String run_alg () {
         StringBuilder result = new StringBuilder();
 //        graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
-        Graph new_graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
+
+        Node start = get_starte();
+        if(start == null){ System.out.println("The error of start"); return null; }
+        Graph new_graph = Dijkstra.calculateShortestPathFromSource(this.graph, start);
+
         graph = null;
         graph = new_graph;
         for (Node node : graph.getNodes()) {
@@ -38,6 +43,20 @@ public class Algorithm {
             result.append("\n");
         }
         return result.toString();
+    }
+    private Node get_starte(){
+        int optionPane = JOptionPane.QUESTION_MESSAGE;
+            String answer = JOptionPane.showInputDialog(
+                    null, "Set the start",
+                    "The setting of start ",
+                    optionPane);
+            for(Node node : nodes){
+                if(node.getName().equals(answer)){
+                    return node;
+                }
+            }
+
+        return null;
     }
 
     public void read_graph_from_nodes(ArrayList<Node> nodes_list) {
