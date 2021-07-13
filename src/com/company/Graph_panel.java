@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.awt.geom.*;
+import java.util.Arrays;
 import java.util.Iterator;
 
 class Edge {
@@ -69,8 +70,7 @@ public class Graph_panel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        for (int i = 0; i < edges.size(); i++) {
-            Edge edge = edges.get(i);
+        for (Edge edge : edges) {
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(4));
             g2.fill(edge.picture);
@@ -80,8 +80,7 @@ public class Graph_panel extends JPanel {
                     (int) (edge.node1.y + edge.node2.y) / 2);
         }
 
-        for (int i = 0; i < vertex.size(); i++) {
-            Node node = vertex.get(i);
+        for (Node node : vertex) {
             g2.setColor(new Color(172, 219, 235));
             g2.fill(node.picture);
             g2.setColor(new Color(1, 1, 1));
@@ -102,8 +101,7 @@ public class Graph_panel extends JPanel {
 
 
     public Node find_circle(Point2D p) {
-        for (int i = 0; i < vertex.size(); i++) {
-            Node node = vertex.get(i);
+        for (Node node : vertex) {
             if (node.picture.contains(p)) {
                 return node;
             }
@@ -112,24 +110,11 @@ public class Graph_panel extends JPanel {
     }
 
     public void set_nodes(ArrayList<Node> nodes) {
-        Double start_x = 30.0;
-        Double start_y = 300.0;
-        Double conter = 50.0;
+        double theta = 2 * Math.PI / nodes.size();
         for (int i = 0; i < nodes.size(); i++) {
             Node node = nodes.get(i);
-            node.x = start_x + conter*2;
-
-            if (i % 2 == 0) {
-                node.y = start_y + conter;
-            }
-            else {
-                node.y = start_y - conter;
-            }
-            if (conter >= 200.0) {
-                start_y += 80;
-                conter = 80.0;
-            }
-            conter += 50.0;
+            node.x = 250 + 150 * Math.cos(theta*i);
+            node.y = 250 + 150 * Math.sin(theta*i);
             node.picture = new Ellipse2D.Double(node.x, node.y,30,30);
             this.vertex.add(node);
 
@@ -137,11 +122,11 @@ public class Graph_panel extends JPanel {
         for (int i = 0; i < nodes.size(); i++) {
             Node node = nodes.get(i);
             var connections = node.getAdjacentNodes();
-            for (int j = 0; j < nodes.size(); j++) {
-                var weight = connections.get(nodes.get(j));
+            for (Node value : nodes) {
+                var weight = connections.get(value);
                 if (weight != null) {
-                    Line2D my_line = new Line2D.Double(node.x + 15, node.y + 15, nodes.get(j).x + 15, nodes.get(j).y + 15);
-                    this.edges.add(new Edge(node, nodes.get(j), my_line, weight));
+                    Line2D my_line = new Line2D.Double(node.x + 15, node.y + 15, value.x + 15, value.y + 15);
+                    this.edges.add(new Edge(node, value, my_line, weight));
                 }
             }
         }
@@ -151,8 +136,7 @@ public class Graph_panel extends JPanel {
     }
 
     public Edge find_line(Point2D p) {
-        for (int i = 0; i < edges.size(); i++) {
-            Edge edge = edges.get(i);
+        for (Edge edge : edges) {
             Line2D line = edge.picture;
             System.out.println("not found");
             double k = (line.getY2() - line.getY1()) / (line.getX2() - line.getX1());
@@ -170,11 +154,8 @@ public class Graph_panel extends JPanel {
     }
 
     public String get_new_name() {
-        var alphabet = new ArrayList<String>();
         String[] alphabet2 = "A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z".split(", ");
-        for (int i = 0; i < 26; i++) {
-            alphabet.add(alphabet2[i]);
-        }
+        var alphabet = new ArrayList<String>(Arrays.asList(alphabet2).subList(0, 26));
         if (vertex.size() == 0) {
             return "A";
         }
@@ -315,7 +296,7 @@ public class Graph_panel extends JPanel {
 
 
         private String get_weight(){
-            Integer weight = 0;
+            int weight = 0;
             String answer = "0";
             String message = "Input the weight";
             int optionPane = JOptionPane.QUESTION_MESSAGE;
@@ -338,7 +319,6 @@ public class Graph_panel extends JPanel {
                 {
                     message = "The weight must be integer";
                     optionPane = JOptionPane.ERROR_MESSAGE;
-                    continue;
                 }
             }
             return answer;
@@ -362,10 +342,6 @@ public class Graph_panel extends JPanel {
         public void mouseDragged(MouseEvent event) {
 
         }
-    }
-
-    public class MyKey extends KeyAdapter {
-
     }
 
 
