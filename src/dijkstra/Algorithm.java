@@ -3,6 +3,8 @@ package dijkstra;
 import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 
 public class Algorithm {
@@ -17,8 +19,13 @@ public class Algorithm {
 //        return this.run_alg();
 //    }
 
+    public ArrayList<StepResults> getResult(){
+        return this.graph.step_res;
+    }
+
     public String run_alg (Node start) {
         StringBuilder result = new StringBuilder();
+
 //        graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
 
 

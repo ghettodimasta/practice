@@ -2,14 +2,14 @@ package com.company;
 
 import dijkstra.Algorithm;
 import dijkstra.Node;
+import dijkstra.StepResults;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GUI extends JFrame {
     private JPanel main_panel;
@@ -20,6 +20,7 @@ public class GUI extends JFrame {
     private String filename = null;
     private String result;
     private Algorithm alg = new Algorithm();
+    private ArrayList<String> step_res;
 
     public GUI() {
         super("Алгоритм Дейкстры");
@@ -33,7 +34,7 @@ public class GUI extends JFrame {
         this.window_width = (int)screenSize.getWidth();
         this.window_height = (int)screenSize.getHeight();
 
-        setMinimumSize(new Dimension(this.window_width/2, this.window_height/2));
+        setMinimumSize(new Dimension(this.window_width/2+500, this.window_height/2+250));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         init_main_panel();
@@ -61,6 +62,7 @@ public class GUI extends JFrame {
     private JTextArea init_text_area(){
         text_area = new JTextArea("Пояснение к работе Алгоритма");
         text_area.setPreferredSize(new Dimension(50,50));
+        text_area.setEditable(false);
         return text_area;
     }
 
@@ -163,6 +165,7 @@ public class GUI extends JFrame {
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
 
+
             ArrayList<Node> save_nodes = new ArrayList<>();
 
             for (Node alg_node : alg.nodes) {
@@ -179,8 +182,34 @@ public class GUI extends JFrame {
             alg.read_graph_from_nodes(graph_panel.vertex);
             Node start = get_starte();
             String text = alg.run_alg(start);
-            text_area.setText(text);
+            step_res = new ArrayList<>();
+            for (StepResults i : alg.getResult()){
+                step_res.add(i.getResult());
+            }
+            AtomicInteger i = new AtomicInteger();
+            text_area.setText(this.step_res.get(i.get()));
+            next_step.addActionListener(e1 -> {
+                if (i.intValue() != this.step_res.size()-1) {
+                    System.out.println("I+: " + i.toString());
+                    i.incrementAndGet();
+                    text_area.setText(this.step_res.get(i.get()));
+                }
+                else {
+                    text_area.setText(this.step_res.get(this.step_res.size()-1) +"\n" + text);
+                }
+            });
+            prev_step.addActionListener(e2 -> {
+                System.out.println("I- " + i.toString());
+                if (i.intValue() == 0){
+                    text_area.setText(this.step_res.get(0) + "\nЭто первый шаг!");
+                }
+                else {
+                    i.decrementAndGet();
+                    text_area.setText(this.step_res.get(i.get()));
+                }
+            });
         });
+
 
         create_graph.addActionListener(e -> {
             del_edge.setVisible(true);

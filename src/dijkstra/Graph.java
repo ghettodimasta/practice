@@ -1,5 +1,6 @@
 package dijkstra;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,8 @@ public class Graph {
     public void addNode(Node nodeA) {
         nodes.add(nodeA);
     }
+
+    ArrayList<StepResults> step_res = new ArrayList<>();
 
     public Set<Node> getNodes() {
         return nodes;
