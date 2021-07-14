@@ -73,21 +73,11 @@ public class GUI extends JFrame {
     private JMenu init_file_menu() {
         JMenu fileMenu = new JMenu("Файл");
         JMenuItem read = new JMenuItem("Открыть файл");
-        JMenuItem save = new JMenuItem("Сохранить");
         JMenuItem save_as = new JMenuItem("Сохранить как");
         JMenuItem exit = new JMenuItem("Выход");
 
         exit.addActionListener( actionEvent -> {
             System.exit(0);
-        });
-
-        save.addActionListener(actionEvent -> {
-            try {
-                graph_panel.write_to_the_file(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
         });
 
         save_as.addActionListener(actionEvent -> {
@@ -119,7 +109,6 @@ public class GUI extends JFrame {
         });
 
         fileMenu.add(read);
-        fileMenu.add(save);
         fileMenu.add(save_as);
         fileMenu.addSeparator();
         fileMenu.add(exit);
@@ -130,17 +119,9 @@ public class GUI extends JFrame {
     private JMenuBar init_menu() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(init_file_menu());
-        menuBar.add(init_info_menu());
         return menuBar;
     }
 
-    private JMenu init_info_menu() {
-        JMenu info = new JMenu("Информация");
-        JMenuItem how_to_use = new JMenuItem("Руководство пользователя");
-        info.add(how_to_use);
-
-        return info;
-    }
     private JToolBar init_tool_bar() {
         JToolBar tool_bar = new JToolBar(1);
         JButton create_graph = new JButton("Создать граф");
@@ -185,6 +166,11 @@ public class GUI extends JFrame {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
+
+            if (graph_panel.edges.size() < 1) {
+                text_area.setText("Добавьте рёбра!");
+                return;
+            }
 
             ArrayList<Node> save_nodes = new ArrayList<>();
 

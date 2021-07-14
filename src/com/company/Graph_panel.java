@@ -272,13 +272,17 @@ public class Graph_panel extends JPanel {
                     Node node2 = vertex.get(vertex.indexOf(second));
                     if (node1 != node2) {
                         System.out.println("add_node");
-                        int weight  = Integer.parseInt(get_weight());
-                        edges.add(new Edge(node1, node2, my_line, weight));
-                        node1.addDestination(node2, weight);
-                        node2.addDestination(node1, weight);
-                        first = null;
-                        second = null;
-                        repaint();
+                        var sd = get_weight();
+                        if (sd != null) {
+                            int weight = Integer.parseInt(sd);
+
+                            edges.add(new Edge(node1, node2, my_line, weight));
+                            node1.addDestination(node2, weight);
+                            node2.addDestination(node1, weight);
+                            first = null;
+                            second = null;
+                            repaint();
+                        }
                     }
                 }
             }
@@ -325,9 +329,12 @@ public class Graph_panel extends JPanel {
                         null, message,
                         "THe weight of edge",
                         optionPane);
-
+                if (answer == null) {
+                    return null;
+                }
                 try {
                     weight = Integer.parseInt(answer);
+
                     if( weight != 0 ) {
                         isNumber = 1;
                     }else {
@@ -341,6 +348,7 @@ public class Graph_panel extends JPanel {
                     optionPane = JOptionPane.ERROR_MESSAGE;
                 }
             }
+            System.out.println(answer);
             return answer;
         }
 
