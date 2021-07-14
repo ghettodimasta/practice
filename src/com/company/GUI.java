@@ -424,19 +424,19 @@ public class GUI extends JFrame {
 
                 if (step.lookingNode.getName().equals(vertex.getName())) {
                     vertex.status = 2;
-                    var vname = vertex.getName();
-                    int count = 0;
-                    System.out.println("Out count name = " + vname);
-                    for (Edge line: edges) {
-                        System.out.println("Out count " + line.node1.getName() + line.node2.getName());
-                        if (line.node1.getName().equals(vname)) {
-                            count += 1;
-                            System.out.println(count);
-                        }
-                    }
-                    if (count <= 1) {
-                        watched.add(vertex);
-                    }
+//                    var vname = vertex.getName();
+//                    int count = 0;
+//                    System.out.println("Out count name = " + vname);
+//                    for (Edge line: edges) {
+//                        System.out.println("Out count " + line.node1.getName() + line.node2.getName());
+//                        if (line.node1.getName().equals(vname)) {
+//                            count += 1;
+//                            System.out.println(count);
+//                        }
+//                    }
+//                    if (count <= 1) {
+//                        watched.add(vertex);
+//                    }
                 }
                 nodes.add(vertex);
                 System.out.print(vertex.getName());
