@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.security.cert.TrustAnchor;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,8 +22,9 @@ public class GUI extends JFrame {
     private String filename = null;
     private String result;
     private Algorithm alg = new Algorithm();
-    private ArrayList<String> step_res;
+//    private ArrayList<String> step_res;
     private ArrayList<Statement> statements;
+    private ArrayList<Statement> to_del = new ArrayList<>();
 
     public GUI() {
         super("Алгоритм Дейкстры");
@@ -201,12 +203,12 @@ public class GUI extends JFrame {
             Node start = get_starte();
             String text = alg.run_alg(start);
 
-            step_res = new ArrayList<>();
+            ArrayList<String> step_res = new ArrayList<String>();
             var results = new ArrayList<StepResults>();
 
-            for (StepResults i : alg.getResult()) {
-                step_res.add(i.getResult());
-            }
+//            for (StepResults i : alg.getResult()) {
+//                step_res.add(i.getResult());
+//            }
 
             for (StepResults i : alg.getResult()) {
                 results.add(i);
@@ -215,18 +217,22 @@ public class GUI extends JFrame {
             this.statements = new ArrayList<>();
             set_statements(results);
 
+            for (Statement i : this.statements) {
+                step_res.add(i.step.getResult());
+            }
+
             AtomicInteger i = new AtomicInteger();
 //            i.set(0);
             set_colors(0);
-            text_area.setText(this.step_res.get(i.get()));
+            text_area.setText(step_res.get(i.get()));
 
             next_step.addActionListener(e1 -> {
 
-                if (i.intValue() != this.step_res.size()-1) {
+                if (i.intValue() != step_res.size()-1) {
                     System.out.println("I+: " + i.toString());
                     i.incrementAndGet();
                     set_colors(i.get());
-                    text_area.setText(this.step_res.get(i.get()));
+                    text_area.setText(step_res.get(i.get()));
                 }
                 else {
                     text_area.setText(text);
@@ -235,11 +241,11 @@ public class GUI extends JFrame {
             prev_step.addActionListener(e2 -> {
                 System.out.println("I- " + i.toString());
                 if (i.intValue() == 0){
-                    text_area.setText(this.step_res.get(0) + "\nЭто первый шаг!");
+                    text_area.setText(step_res.get(0) + "\nЭто первый шаг!");
                 }
                 else {
                     i.decrementAndGet();
-                    text_area.setText(this.step_res.get(i.get()));
+                    text_area.setText(step_res.get(i.get()));
                     set_colors(i.get());
                 }
             });
@@ -359,13 +365,32 @@ public class GUI extends JFrame {
         repaint();
     }
 
+    private void all_grey() {
+        for (Node node: graph_panel.vertex) {
+            node.status = 3;
+        }
+        for (Edge ed: graph_panel.edges) {
+            ed.status = 0;
+        }
+        repaint();
+    }
+
     private void set_statements(ArrayList<StepResults> step_results) {
         // status 0 - unwatched; 1 - current; 2 - looking; 3 - watched
         ArrayList<Node> watched = new ArrayList<>();
         Node cur = null;
+        boolean skip = false;
         for (StepResults step : step_results) {
             var cur_node = step.currentNode;
             var looking_node = step.lookingNode;
+            for (Node nd : watched) {
+                if (looking_node.getName().equals(nd.getName())) {
+                    skip = true;
+                }
+            }
+            if (skip) {
+                continue;
+            }
             String cur_name = cur_node.getName();
             String look_name = looking_node.getName();
 
@@ -464,8 +489,8 @@ public class GUI extends JFrame {
             }
 
             System.out.println("------");
-            this.statements.add(new Statement(nodes, edges));
+            this.statements.add(new Statement(nodes, edges, step));
         }
-
     }
+
 }

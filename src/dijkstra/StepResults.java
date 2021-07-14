@@ -9,7 +9,7 @@ public class StepResults {
     Integer shortest_after;
 
     public String getResult() {
-        this.result = "Текущая вершина : " + this.currentNode.getName() + "\nСледующая вершина: " +
+        this.result = "Текущая вершина : " + this.currentNode.getName() + "\nПросматриваемая вершина: " +
                 this.lookingNode.getName() + "\nСтоимость пути: " + this.price + "\nИзначальный кратчайший путь: " +
         this.shortest_before + "\nТекущий кратчайший путь: " + this.shortest_after;
         return this.result;
