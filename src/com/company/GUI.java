@@ -78,28 +78,7 @@ public class GUI extends JFrame {
         exit.addActionListener( actionEvent -> {
             System.exit(0);
         });
-        save.addActionListener(actionEvent -> {
-            try {
-                graph_panel.write_to_the_file(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-        });
-        save_as.addActionListener(actionEvent -> {
-            JFileChooser j = new JFileChooser();
-            j.showSaveDialog(null);
-            filename = j.getSelectedFile().toString();
-            System.out.println(filename);
-            try {
-                graph_panel.write_to_the_file(filename);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-<<<<<<< Updated upstream
-        });
-=======
         save.addActionListener(actionEvent -> {
             try {
                 graph_panel.write_to_the_file(null);
@@ -122,7 +101,6 @@ public class GUI extends JFrame {
 
         });
 
->>>>>>> Stashed changes
         read.addActionListener( actionEvent -> {
             JFileChooser j = new JFileChooser();
             j.showOpenDialog(null);
