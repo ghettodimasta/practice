@@ -7,6 +7,7 @@ import dijkstra.StepResults;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,6 +22,7 @@ public class GUI extends JFrame {
     private String result;
     private Algorithm alg = new Algorithm();
     private ArrayList<String> step_res;
+    private ArrayList<Statement> statements;
 
     public GUI() {
         super("Алгоритм Дейкстры");
@@ -95,7 +97,32 @@ public class GUI extends JFrame {
                 e.printStackTrace();
             }
 
+<<<<<<< Updated upstream
         });
+=======
+        save.addActionListener(actionEvent -> {
+            try {
+                graph_panel.write_to_the_file(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        save_as.addActionListener(actionEvent -> {
+            JFileChooser j = new JFileChooser();
+            j.showSaveDialog(null);
+            filename = j.getSelectedFile().toString();
+            System.out.println(filename);
+            try {
+                graph_panel.write_to_the_file(filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+>>>>>>> Stashed changes
         read.addActionListener( actionEvent -> {
             JFileChooser j = new JFileChooser();
             j.showOpenDialog(null);
@@ -139,7 +166,6 @@ public class GUI extends JFrame {
         JButton create_graph = new JButton("Создать граф");
         create_graph.setFocusPainted(false);
         JButton add_edge = new JButton("Добавить ребро");
-//        JTextArea weight = new JTextArea("Введите вес");
         JButton add_vertex = new JButton("Добавить вершину");
         JButton del_edge = new JButton("Удалить ребро");
         JButton del_vertex = new JButton("Удалить вершину");
@@ -148,7 +174,6 @@ public class GUI extends JFrame {
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
         JButton stop_alg = new JButton("Остановить");
-//        weight.setVisible(false);
 
         //---------------------------------------------------------
 
@@ -166,7 +191,6 @@ public class GUI extends JFrame {
         tool_bar.add(del_vertex);
         tool_bar.add(stop_add);
         tool_bar.addSeparator(new Dimension(50, 50));
-//        tool_bar.add(weight);
 
         next_step.setVisible(false);
         prev_step.setVisible(false);
@@ -181,7 +205,6 @@ public class GUI extends JFrame {
             next_step.setVisible(true);
             prev_step.setVisible(true);
             stop_alg.setVisible(true);
-
 
             ArrayList<Node> save_nodes = new ArrayList<>();
 
@@ -199,20 +222,36 @@ public class GUI extends JFrame {
             alg.read_graph_from_nodes(graph_panel.vertex);
             Node start = get_starte();
             String text = alg.run_alg(start);
+
             step_res = new ArrayList<>();
-            for (StepResults i : alg.getResult()){
+            var results = new ArrayList<StepResults>();
+
+            for (StepResults i : alg.getResult()) {
                 step_res.add(i.getResult());
             }
+
+            for (StepResults i : alg.getResult()) {
+                results.add(i);
+            }
+
+            this.statements = new ArrayList<>();
+            set_statements(results);
+
             AtomicInteger i = new AtomicInteger();
+//            i.set(0);
+            set_colors(0);
             text_area.setText(this.step_res.get(i.get()));
+
             next_step.addActionListener(e1 -> {
+
                 if (i.intValue() != this.step_res.size()-1) {
                     System.out.println("I+: " + i.toString());
                     i.incrementAndGet();
+                    set_colors(i.get());
                     text_area.setText(this.step_res.get(i.get()));
                 }
                 else {
-                    text_area.setText(this.step_res.get(this.step_res.size()-1) +"\n" + text);
+                    text_area.setText(text);
                 }
             });
             prev_step.addActionListener(e2 -> {
@@ -223,7 +262,17 @@ public class GUI extends JFrame {
                 else {
                     i.decrementAndGet();
                     text_area.setText(this.step_res.get(i.get()));
+                    set_colors(i.get());
                 }
+            });
+
+            stop_alg.addActionListener(e3 -> {
+                i.set(0);
+                next_step.setVisible(false);
+                prev_step.setVisible(false);
+                stop_alg.setVisible(false);
+                text_area.setText("Пояснение к работе алгоритма");
+                delete_colors();
             });
         });
 
@@ -269,12 +318,7 @@ public class GUI extends JFrame {
             make_False_Default();
         });
 
-        stop_alg.addActionListener(e -> {
-            next_step.setVisible(false);
-            prev_step.setVisible(false);
-            stop_alg.setVisible(false);
-            text_area.setText("Пояснение к работе алгоритма");
-        });
+
 
         return tool_bar;
     }
@@ -300,4 +344,150 @@ public class GUI extends JFrame {
         return null;
     }
 
+    private void color_graph(StepResults step_res) {
+//        status 0 - unwatched; 1 - current; 2 - looking; 3 - watched
+        var cur_node = graph_panel.vertex.get(graph_panel.vertex.indexOf(step_res.currentNode));
+        cur_node.status = 1;
+        var looking_node = graph_panel.vertex.get(graph_panel.vertex.indexOf(step_res.lookingNode));
+        looking_node.status = 2;
+        for (Edge ed : graph_panel.edges) {
+            if (ed == null) {
+                continue;
+            }
+            if (ed.node1.getName().equals(cur_node.getName()) &&
+                    ed.node2.getName().equals(looking_node.getName())) {
+                ed.status = 1;
+                break;
+            }
+        }
+
+        repaint();
+    }
+
+    private void set_colors(Integer index) {
+        var now_statement = this.statements.get(index);
+        graph_panel.vertex = now_statement.nodes;
+        graph_panel.edges = now_statement.edges;
+        repaint();
+    }
+
+    private void delete_colors() {
+        for (Node node: graph_panel.vertex) {
+            node.status = 0;
+        }
+        for (Edge ed: graph_panel.edges) {
+            ed.status = 0;
+        }
+        repaint();
+    }
+
+    private void set_statements(ArrayList<StepResults> step_results) {
+        // status 0 - unwatched; 1 - current; 2 - looking; 3 - watched
+        ArrayList<Node> watched = new ArrayList<>();
+        Node cur = null;
+        for (StepResults step : step_results) {
+            var cur_node = step.currentNode;
+            var looking_node = step.lookingNode;
+            String cur_name = cur_node.getName();
+            String look_name = looking_node.getName();
+
+            if (cur == null) {
+                cur = cur_node;
+            }
+
+            if (!cur.getName().equals(cur_node.getName())) {
+                watched.add(cur);
+                cur = cur_node;
+            }
+
+            var nodes = new ArrayList<Node>();
+            var edges = new ArrayList<Edge>();
+
+            for (Edge ed : graph_panel.edges) {
+                if (ed == null) {
+                    continue;
+                }
+                Edge edge = new Edge(ed.node1, ed.node2, ed.picture, ed.weight);
+                String name1 = ed.node1.getName();
+                String name2 = ed.node2.getName();
+                if ((cur_name.equals(name1) && look_name.equals(name2)) ||
+                        (look_name.equals(name1) && cur_name.equals(name2))) {
+                    edge.status = 1;
+//                    break;
+                }
+                System.out.print(edge.node1.getName() + edge.node2.getName());
+                System.out.print(' ');
+                System.out.println(edge.status);
+                edges.add(edge);
+            }
+
+            for (Node node : graph_panel.vertex) {
+                if (node == null) {
+                    continue;
+                }
+
+                Node vertex = new Node(node.getName());
+                vertex.x = node.x;
+                vertex.y = node.y;
+                vertex.status = 0;
+                vertex.picture = node.picture;
+                vertex.setDistance(node.getDistance());
+//                TODO adj nodes + shortest_path
+                if (step.currentNode.getName().equals(vertex.getName())) {
+                    vertex.status = 1;
+                }
+
+                for (Node wan : watched) {
+                    if (wan.getName().equals(vertex.getName())) {
+                        vertex.status = 3;
+                        break;
+                    }
+                }
+
+                if (step.lookingNode.getName().equals(vertex.getName())) {
+                    vertex.status = 2;
+                    var vname = vertex.getName();
+                    int count = 0;
+                    System.out.println("Out count name = " + vname);
+                    for (Edge line: edges) {
+                        System.out.println("Out count " + line.node1.getName() + line.node2.getName());
+                        if (line.node1.getName().equals(vname)) {
+                            count += 1;
+                            System.out.println(count);
+                        }
+                    }
+                    if (count <= 1) {
+                        watched.add(vertex);
+                    }
+                }
+                nodes.add(vertex);
+                System.out.print(vertex.getName());
+                System.out.print(' ');
+                System.out.println(vertex.status);
+            }
+
+            for (Edge edge : edges) {
+                String name1 = edge.node1.getName();
+                String name2 = edge.node2.getName();
+
+                for (Node node : nodes) {
+                    if (node.getName().equals(name1)) {
+                        for (Node vertex : nodes) {
+                            if (vertex.getName().equals(name2)) {
+                                node.addDestination(vertex, edge.weight);
+                                vertex.addDestination(node, edge.weight);
+                                System.out.println("Linked " + name1 + " " + name2 + " " + edge.weight);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            System.out.println("------");
+            this.statements.add(new Statement(nodes, edges));
+        }
+
+    }
 }

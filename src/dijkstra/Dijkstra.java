@@ -1,7 +1,5 @@
 package dijkstra;
 
-import netscape.javascript.JSObject;
-
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -21,26 +19,23 @@ public class Dijkstra {
             unsettledNodes.remove(currentNode);
 
             for (Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
-//                json.add(step_res.put("current node", ))
                 step_res.add(new StepResults());
                 step_res.get(counter).currentNode = currentNode;
                 Node adjacentNode = adjacencyPair.getKey();
                 Integer edgeWeigh = adjacencyPair.getValue();
                 step_res.get(counter).lookingNode = adjacentNode;
-                step_res.get(counter).shortest_path = edgeWeigh;
+                step_res.get(counter).price = edgeWeigh;
+                step_res.get(counter).shortest_before = adjacentNode.getDistance();
                 if (!settledNodes.contains(adjacentNode)) {
                     CalculateMinimumDistance(adjacentNode, edgeWeigh, currentNode);
                     unsettledNodes.add(adjacentNode);
                     step_res.get(counter).lookingNode = adjacentNode;
-                    step_res.get(counter).shortest_path = edgeWeigh;
+                    step_res.get(counter).price = edgeWeigh;
                 }
+                step_res.get(counter).shortest_after = adjacentNode.getDistance();
                 counter++;
             }
             settledNodes.add(currentNode);
-        }
-        for (StepResults i : step_res){
-//            System.out.println("current node : " + i.currentNode.getName() + " looking node: " + i.lookingNode.getName() + " shortest path: " + i.shortest_path);
-            i.result = "Текущая вершина : " + i.currentNode.getName() + "\nСледующая вершина: " + i.lookingNode.getName() + "\nСтоимость пути: " + i.shortest_path;
         }
         graph.step_res = step_res;
         return graph;

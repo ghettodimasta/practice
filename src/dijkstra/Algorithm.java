@@ -13,11 +13,6 @@ public class Algorithm {
     public ArrayList<Node> nodes = new ArrayList<Node>();
 
 
-//    public String run_alg_file(String filename) throws Exception {
-//        read_graph_from_file(filename);
-//
-//        return this.run_alg();
-//    }
 
     public ArrayList<StepResults> getResult(){
         return this.graph.step_res;
@@ -25,9 +20,6 @@ public class Algorithm {
 
     public String run_alg (Node start) {
         StringBuilder result = new StringBuilder();
-
-//        graph = Dijkstra.calculateShortestPathFromSource(this.graph, nodes.get(0));
-
 
         System.out.println(start);
         if(start == null) {

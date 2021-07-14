@@ -17,6 +17,7 @@ public class Node {
     private LinkedList<Node> shortestPath = new LinkedList<>();
 
     private Integer distance = Integer.MAX_VALUE;
+    public Integer status = 0;
 
     private Map<Node, Integer> adjacentNodes = new HashMap<>();
 

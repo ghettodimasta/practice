@@ -1,12 +1,17 @@
 package dijkstra;
 
 public class StepResults {
-    Node currentNode;
-    Node lookingNode;
-    Integer shortest_path;
+    public Node currentNode;
+    public Node lookingNode;
+    Integer price;
     String result;
+    Integer shortest_before;
+    Integer shortest_after;
 
     public String getResult() {
+        this.result = "Текущая вершина : " + this.currentNode.getName() + "\nСледующая вершина: " +
+                this.lookingNode.getName() + "\nСтоимость пути: " + this.price + "\nИзначальный кратчайший путь: " +
+        this.shortest_before + "\nТекущий кратчайший путь: " + this.shortest_after;
         return this.result;
     }
 }

@@ -12,12 +12,16 @@ import java.util.ArrayList;
 import java.awt.geom.*;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 class Edge {
     public Line2D picture;
     public Node node1;
     public Node node2;
     public Integer weight;
+    public Integer status = 0;
 
     Edge (Node node1, Node node2, Line2D line, Integer weight) {
         this.picture = line;
@@ -32,7 +36,7 @@ public class Graph_panel extends JPanel {
     private Node first;
     private Node second;
     //    private ArrayList<Line2D> lines;
-    private ArrayList<Edge> edges;
+    public ArrayList<Edge> edges;
     public ArrayList<Node> vertex;
     private Node current;
     public boolean addVertexListenerIsActive = false;
@@ -74,7 +78,12 @@ public class Graph_panel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         for (Edge edge : edges) {
-            g2.setColor(Color.BLACK);
+            if (edge.status == 0) {
+                g2.setColor(Color.BLACK);
+            }
+            else {
+                g2.setColor(Color.GREEN);
+            }
             g2.setStroke(new BasicStroke(4));
             g2.fill(edge.picture);
             g2.draw(edge.picture);
@@ -84,7 +93,18 @@ public class Graph_panel extends JPanel {
         }
 
         for (Node node : vertex) {
-            g2.setColor(new Color(172, 219, 235));
+            if (node.status == 0) {
+                g2.setColor(new Color(172, 219, 235));
+            }
+            if (node.status == 1) {
+                g2.setColor(new Color(90, 190, 65));
+            }
+            if (node.status == 2) {
+                g2.setColor(new Color(240, 240, 60));
+            }
+            if (node.status == 3) {
+                g2.setColor(new Color(140, 140, 140));
+            }
             g2.fill(node.picture);
             g2.setColor(new Color(1, 1, 1));
             g2.drawString(String.valueOf(node.getName()), Math.round(node.x), Math.round(node.y));
@@ -283,9 +303,9 @@ public class Graph_panel extends JPanel {
         private void DeliteVertex(){
             //if use a usually circle, the elements will be scipped
             int fist_size = edges.size();
-            for(int i =0;i< fist_size;i++) {
+            for(int i = 0; i < fist_size; i++) {
                 for (Edge edge : edges) {
-                    if (edge.node1 == current || edge.node2 == current) {
+                    if (edge.node1.getName().equals(current.getName()) || edge.node2.getName().equals(current.getName())) {
                         edges.remove(edge);
                         break;
                     }
@@ -329,6 +349,22 @@ public class Graph_panel extends JPanel {
 
 
 
+    }
+
+    public void write_to_the_file(String filename) throws FileNotFoundException {
+        if(filename == null) filename = "the_faste_save";
+        File file = new File(filename);
+        PrintWriter pw = new PrintWriter(file);
+        for(Edge edge : edges){
+            String str = new String();
+            str += edge.node1.getName();
+            str += " ";
+            str += edge.node2.getName();
+            str += " ";
+            str += String.valueOf(edge.weight);
+            pw.println(str);
+        }
+        pw.close();
     }
 
     private class MyMove implements MouseMotionListener {
