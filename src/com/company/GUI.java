@@ -76,7 +76,26 @@ public class GUI extends JFrame {
         exit.addActionListener( actionEvent -> {
             System.exit(0);
         });
+        save.addActionListener(actionEvent -> {
+            try {
+                graph_panel.write_to_the_file(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        });
+        save_as.addActionListener(actionEvent -> {
+            JFileChooser j = new JFileChooser();
+            j.showSaveDialog(null);
+            filename = j.getSelectedFile().toString();
+            System.out.println(filename);
+            try {
+                graph_panel.write_to_the_file(filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
         read.addActionListener( actionEvent -> {
             JFileChooser j = new JFileChooser();
             j.showOpenDialog(null);
@@ -125,7 +144,6 @@ public class GUI extends JFrame {
         JButton del_edge = new JButton("Удалить ребро");
         JButton del_vertex = new JButton("Удалить вершину");
         JButton stop_add = new JButton("Завершить создание");
-        JButton save_graph = new JButton("Сохранить граф");
         JButton run_algorithm = new JButton("Запуск алгоритма");
         JButton next_step = new JButton("Следующий шаг");
         JButton prev_step = new JButton("Предыдущий шаг");
@@ -136,7 +154,6 @@ public class GUI extends JFrame {
 
         tool_bar.setFloatable(false);
         tool_bar.add(create_graph);
-        tool_bar.add(save_graph);
         tool_bar.add(run_algorithm);
         tool_bar.addSeparator(new Dimension(50, 50));
         tool_bar.add(next_step);

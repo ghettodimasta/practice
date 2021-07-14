@@ -5,6 +5,9 @@ import dijkstra.Node;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.awt.geom.*;
 import java.util.Arrays;
@@ -344,6 +347,21 @@ public class Graph_panel extends JPanel {
         }
     }
 
+    public void write_to_the_file(String filename) throws FileNotFoundException {
+        if(filename == null) filename = "the_faste_save";
+        File file = new File(filename);
+        PrintWriter pw = new PrintWriter(file);
+        for(Edge edge : edges){
+            String str = new String();
+            str += edge.node1.getName();
+            str += " ";
+            str += edge.node2.getName();
+            str += " ";
+            str += String.valueOf(edge.weight);
+            pw.println(str);
+        }
+        pw.close();
+    }
 
 }
 
