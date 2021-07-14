@@ -84,6 +84,14 @@ public class Graph_panel extends JPanel {
             g2.setStroke(new BasicStroke(4));
             g2.fill(edge.picture);
             g2.draw(edge.picture);
+            var start_x = edge.picture.getX1();
+            var start_y = edge.picture.getY1();
+            var end_x = edge.picture.getX2();
+            var end_y = edge.picture.getY2();
+            Integer length = 10;
+            Double alpha = Math.atan(Math.abs((end_y-start_y)/(end_x-start_x)));
+
+            g2.fill(new Line2D.Double());
             g2.setColor(Color.RED);
             g2.drawString(edge.weight.toString(), (int) (edge.node1.x + edge.node2.x) / 2,
                     (int) (edge.node1.y + edge.node2.y) / 2);
@@ -271,14 +279,14 @@ public class Graph_panel extends JPanel {
                     Node node1 = vertex.get(vertex.indexOf(first));
                     Node node2 = vertex.get(vertex.indexOf(second));
                     if (node1 != node2) {
-                        System.out.println("add_node");
+//                        System.out.println("add_node");
                         var sd = get_weight();
                         if (sd != null) {
                             int weight = Integer.parseInt(sd);
 
                             edges.add(new Edge(node1, node2, my_line, weight));
                             node1.addDestination(node2, weight);
-                            node2.addDestination(node1, weight);
+//                            node2.addDestination(node1, weight);
                             first = null;
                             second = null;
                             repaint();

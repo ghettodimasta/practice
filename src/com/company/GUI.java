@@ -464,7 +464,7 @@ public class GUI extends JFrame {
                         for (Node vertex : nodes) {
                             if (vertex.getName().equals(name2)) {
                                 node.addDestination(vertex, edge.weight);
-                                vertex.addDestination(node, edge.weight);
+//                                vertex.addDestination(node, edge.weight);
                                 System.out.println("Linked " + name1 + " " + name2 + " " + edge.weight);
                                 break;
                             }
